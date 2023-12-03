@@ -1,6 +1,10 @@
 package com.cgvsu;
 
 import com.cgvsu.render_engine.RenderEngine;
+import com.cgvsu.render_engine.transformation.AffineTransformation;
+import com.cgvsu.render_engine.transformation.DefaultRotate;
+import com.cgvsu.render_engine.transformation.DefaultScale;
+import com.cgvsu.render_engine.transformation.DefaultTransition;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
