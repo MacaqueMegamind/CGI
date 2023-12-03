@@ -1,11 +1,22 @@
 package com.cgvsu.math;
 
-// Это заготовка для собственной библиотеки для работы с линейной алгеброй
+import static com.cgvsu.math.Constants.EPS;
+
 public class Vector2f {
+    public float x, y;
     public Vector2f(float x, float y) {
         this.x = x;
         this.y = y;
     }
+    public boolean equals(Vector2f other) {
+        return Math.abs(x - other.x) < EPS && Math.abs(y - other.y) < EPS;
+    }
 
-    public float x, y;
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
 }
