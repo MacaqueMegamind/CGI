@@ -3,19 +3,23 @@ package com.cgvsu.render_engine.transformation;
 import javax.vecmath.Matrix3f;
 
 public class DefaultRotate implements Rotate{
+    private final float defaultRotateX = 0, defaultRotateY = 180, defaultRotateZ = 180;
     float rotateX = 0, rotateY = 0, rotateZ = 0;
 
     public DefaultRotate(float rotateX, float rotateY, float rotateZ) {
-        this.rotateX = (float) Math.toRadians(rotateX);
-        this.rotateY = (float) Math.toRadians(rotateY);
-        this.rotateZ = (float) Math.toRadians(rotateZ);
+        this.rotateX = (float) Math.toRadians(defaultRotateX - rotateX);
+        this.rotateY = (float) Math.toRadians(defaultRotateY - rotateY);
+        this.rotateZ = (float) Math.toRadians(defaultRotateZ- rotateZ);
     }
 
     public DefaultRotate() {
+        this.rotateX = (float) Math.toRadians(defaultRotateX);
+        this.rotateY = (float) Math.toRadians(defaultRotateY);
+        this.rotateZ = (float) Math.toRadians(defaultRotateZ);
     }
 
     public float getRotateX() {
-        return rotateX;
+        return (float) Math.toDegrees(rotateX);
     }
 
     public void setRotateX(float rotateX) {
@@ -23,7 +27,7 @@ public class DefaultRotate implements Rotate{
     }
 
     public float getRotateY() {
-        return rotateY;
+        return (float) Math.toDegrees(rotateY);
     }
 
     public void setRotateY(float rotateY) {
@@ -31,7 +35,7 @@ public class DefaultRotate implements Rotate{
     }
 
     public float getRotateZ() {
-        return rotateZ;
+        return (float) Math.toDegrees(rotateZ);
     }
 
     public void setRotateZ(float rotateZ) {

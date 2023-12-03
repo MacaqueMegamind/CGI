@@ -40,8 +40,8 @@ public class DefaultScale implements Scale{
 
     @Override
     public Matrix3f getMatrix() {
-        return new Matrix3f(scaleX, 0, 0,
-                0, scaleY, 0,
-                0, 0, scaleZ);
+        return new Matrix3f(1/scaleX, 0, 0,
+                0, 1/scaleY, 0,
+                0, 0, 1/scaleZ);
     }
 }
