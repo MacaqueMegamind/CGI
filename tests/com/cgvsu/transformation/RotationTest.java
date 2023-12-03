@@ -1,6 +1,7 @@
 package com.cgvsu.transformation;
 
-import com.cgvsu.math.Vector3f;
+import com.cgvsu.math.Constants;
+import com.cgvsu.math.vector.Vector3f;
 import com.cgvsu.render_engine.transformation.AffineTransformation;
 import com.cgvsu.render_engine.transformation.DefaultRotate;
 import org.junit.jupiter.api.Test;
@@ -25,9 +26,9 @@ public class RotationTest {
         expected.add(new Vector3f(0, 1, 0));
 
         for (int i = 0; i < l.size(); i++) {
-            if(!l.get(i).equals(expected.get(i))){
+            if(!l.get(i).epsEquals(expected.get(i), Constants.EPS)){
                 Vector3f e = l.get(1);
-                System.out.println(e.x + " " + e.y + " " + e.z);
+                System.err.println(e.x + " " + e.y + " " + e.z);
                 throw new RuntimeException("Test 01 Failed");
             }
         }
@@ -49,7 +50,7 @@ public class RotationTest {
         expected.add(new Vector3f(-1, 0, 0));
 
         for (int i = 0; i < l.size(); i++) {
-            if(!l.get(i).equals(expected.get(i))){
+            if(!l.get(i).epsEquals(expected.get(i), Constants.EPS)){
                 Vector3f e = l.get(1);
                 System.err.println(e.x + " " + e.y + " " + e.z);
                 throw new RuntimeException("Test 02 Failed");
@@ -70,12 +71,12 @@ public class RotationTest {
 
         List<Vector3f> expected = new ArrayList<>();
         expected.add(new Vector3f(0, 0, 0));
-        expected.add(new Vector3f(0, 0, -1));
+        expected.add(new Vector3f(0, 0, 1));
 
 
 
         for (int i = 0; i < l.size(); i++) {
-            if(!l.get(i).equals(expected.get(i))){
+            if(!l.get(i).epsEquals(expected.get(i), Constants.EPS)){
                 Vector3f e = l.get(1);
                 System.err.println(e.x + " " + e.y + " " + e.z);
                 throw new RuntimeException("Test 03 Failed");
@@ -105,7 +106,7 @@ public class RotationTest {
 //
 //
 //            for (int i = 0; i < l.size(); i++) {
-//                if (!l.get(i).equals(expected.get(i))) {
+//                if(!l.get(i).epsEquals(expected.get(i), Constants.EPS)){
 //                    Vector3f e = l.get(1);
 //                    System.out.println(e.x + " " + e.y + " " + e.z);
 //                    System.out.println(angle);

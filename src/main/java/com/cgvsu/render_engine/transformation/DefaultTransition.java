@@ -1,6 +1,5 @@
 package com.cgvsu.render_engine.transformation;
-
-import javax.vecmath.Matrix4f;
+import com.cgvsu.math.matrix.Matrix4f;
 
 public class DefaultTransition implements Transition {
     float transitionX = 0, transitionY = 0, transitionZ = 0;
@@ -40,9 +39,9 @@ public class DefaultTransition implements Transition {
 
     @Override
     public Matrix4f getMatrix() {
-        return new Matrix4f(1, 0, 0, transitionX,
-                0, 1, 0, transitionY,
-                0, 0, 1, transitionZ,
-                0, 0, 0, 1);
+        return new Matrix4f(new float[]{1, 0, 0, transitionX,
+                                        0, 1, 0, transitionY,
+                                        0, 0, 1, transitionZ,
+                                        0, 0, 0, 1});
     }
 }

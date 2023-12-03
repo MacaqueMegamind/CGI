@@ -1,15 +1,16 @@
 package com.cgvsu.render_engine.transformation;
 
-import javax.vecmath.Matrix3f;
+
+import com.cgvsu.math.matrix.Matrix3f;
 
 public class DefaultRotate implements Rotate{
     private final float defaultRotateX = 0, defaultRotateY = 180, defaultRotateZ = 180;
     float rotateX = 0, rotateY = 0, rotateZ = 0;
 
     public DefaultRotate(float rotateX, float rotateY, float rotateZ) {
-        this.rotateX = (float) Math.toRadians(defaultRotateX + rotateX);
-        this.rotateY = (float) Math.toRadians(defaultRotateY + rotateY);
-        this.rotateZ = (float) Math.toRadians(defaultRotateZ + rotateZ);
+        this.rotateX = (float) Math.toRadians(defaultRotateX - rotateX);
+        this.rotateY = (float) Math.toRadians(defaultRotateY - rotateY);
+        this.rotateZ = (float) Math.toRadians(defaultRotateZ - rotateZ);
     }
 
     public DefaultRotate() {
@@ -68,9 +69,6 @@ public class DefaultRotate implements Rotate{
         
     @Override
     public Matrix3f getMatrix() {
-            Matrix3f matrix = rotateMatrixZ();
-            matrix.mul(rotateMatrixY());
-            matrix.mul(rotateMatrixX());
-            return matrix;
+            return rotateMatrixZ().mul(rotateMatrixY()).mul(rotateMatrixX());
     }
 }

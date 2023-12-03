@@ -1,6 +1,7 @@
 package com.cgvsu.render_engine.transformation;
 
-import javax.vecmath.Matrix3f;
+
+import com.cgvsu.math.matrix.Matrix3f;
 
 public class DefaultScale implements Scale{
     float scaleX = 1, scaleY = 1, scaleZ = 1;
@@ -40,8 +41,8 @@ public class DefaultScale implements Scale{
 
     @Override
     public Matrix3f getMatrix() {
-        return new Matrix3f(1/scaleX, 0, 0,
-                0, 1/scaleY, 0,
-                0, 0, 1/scaleZ);
+        return new Matrix3f(new float[]{1/scaleX, 0, 0,
+                0, scaleY, 0,
+                0, 0, scaleZ});
     }
 }
