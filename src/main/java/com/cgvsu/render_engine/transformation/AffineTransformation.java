@@ -68,8 +68,8 @@ public class AffineTransformation implements Transformation{
 //        matrix.sub(transition());
 
         Matrix4f matrix = translateMatrix3To4(scale.getMatrix())
-                .sub(translateMatrix3To4(rotate.getMatrix()))
-                .sub(transition.getMatrix());
+                .mul(translateMatrix3To4(rotate.getMatrix()))
+                .mul(transition.getMatrix());
 
         for(Vector3f v:vector){
             Vector4f v4 = new Vector4f(v.getX(), v.getY(), v.getZ(), 1);

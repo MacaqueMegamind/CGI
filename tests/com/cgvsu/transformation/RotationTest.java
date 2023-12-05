@@ -47,7 +47,7 @@ public class RotationTest {
 
         List<Vector3f> expected = new ArrayList<>();
         expected.add(new Vector3f(0, 0, 0));
-        expected.add(new Vector3f(-1, 0, 0));
+        expected.add(new Vector3f(1, 0, 0));
 
         for (int i = 0; i < l.size(); i++) {
             if(!l.get(i).epsEquals(expected.get(i), Constants.EPS)){
