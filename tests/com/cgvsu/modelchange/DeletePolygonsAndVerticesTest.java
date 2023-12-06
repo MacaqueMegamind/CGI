@@ -40,12 +40,6 @@ public class DeletePolygonsAndVerticesTest {
 
 
 
-        @Test
-        public void testCrashModel()  {
-
-        }
-
-
 
 
     private static class TestStrings {

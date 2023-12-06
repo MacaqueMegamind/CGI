@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class DeletePolygonsAndVertices {
+    /**
+     * Removing selected vertices
+     * @param model       The model
+     * @param vertexIndicesToRemove       The array of indexes to delete
+     */
     public static void removeVertices(Model model, int[] vertexIndicesToRemove) {
         // Удаление выбранных вершин
         ArrayList<Vector3f> newVertices = new ArrayList<>(model.getVertices());
