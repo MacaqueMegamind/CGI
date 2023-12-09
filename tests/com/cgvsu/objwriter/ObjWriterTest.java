@@ -2,7 +2,7 @@ package com.cgvsu.objwriter;
 import com.cgvsu.model.Model;
 import com.cgvsu.model.Polygon;
 import com.cgvsu.objreader.ObjReader;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;

@@ -269,6 +269,21 @@ class Vector3fTest {
     }
 
     @Test
+    void testNormalizeWithVecmath(){
+        Vector3f v1 = new Vector3f(2.0123f, 1.0f, 3.0f);
+
+        Vector3f vO = v1.nor();
+
+        javax.vecmath.Vector3f vVec1 = new javax.vecmath.Vector3f(2.0123f, 1.0f, 3.0f);
+
+        vVec1.normalize();
+
+        assertEquals(vVec1.x, v1.x);
+        assertEquals(vVec1.y, v1.y);
+        assertEquals(vVec1.z, v1.z);
+    }
+
+    @Test
     void testLimitEffective() {
         v.set(420.0f, -421.0f, 1006.0f);
         v.limit(25.0f);
@@ -378,6 +393,8 @@ class Vector3fTest {
         assertEquals(-4.0f, v.z);
     }
 
+
+
     @Test
     void testSubValue() {
         v.set(1.0f, 2.0f, 3.0f);
@@ -386,6 +403,23 @@ class Vector3fTest {
         assertEquals(-9.0f, v.x);
         assertEquals(-8.0f, v.y);
         assertEquals(-7.0f, v.z);
+    }
+
+    void testSubWithVecmath(){
+        Vector3f v1 = new Vector3f(2.0f, 1.0f, 3.0f);
+        Vector3f v2 = new Vector3f(4.0f, 5.0f, 7.0f);
+
+        Vector3f vO = new Vector3f().sub(v1, v2);
+
+        javax.vecmath.Vector3f vVec1 = new javax.vecmath.Vector3f(2.0f, 1.0f, 3.0f);
+        javax.vecmath.Vector3f vVec2 = new javax.vecmath.Vector3f(4.0f, 5.0f, 7.0f);
+
+        javax.vecmath.Vector3f vVecO = new javax.vecmath.Vector3f();
+        vVecO.sub(vVec1, vVec2);
+
+        assertEquals(vVecO.x, vO.x);
+        assertEquals(vVecO.y, vO.y);
+        assertEquals(vVecO.z, vO.z);
     }
 
     @Test
@@ -591,6 +625,23 @@ class Vector3fTest {
         assertEquals(-13.0f, v.x);
         assertEquals(18.0f, v.y);
         assertEquals(16.0f, v.z);
+    }
+    @Test
+    void testCrossWithVecmath(){
+        Vector3f v1 = new Vector3f(2.0f, 1.0f, 3.0f);
+        Vector3f v2 = new Vector3f(4.0f, 5.0f, 7.0f);
+
+        Vector3f vO = new Vector3f().crs(v1, v2);
+
+        javax.vecmath.Vector3f vVec1 = new javax.vecmath.Vector3f(2.0f, 1.0f, 3.0f);
+        javax.vecmath.Vector3f vVec2 = new javax.vecmath.Vector3f(4.0f, 5.0f, 7.0f);
+
+        javax.vecmath.Vector3f vVecO = new javax.vecmath.Vector3f();
+        vVecO.cross(vVec1, vVec2);
+
+        assertEquals(vVecO.x, vO.x);
+        assertEquals(vVecO.y, vO.y);
+        assertEquals(vVecO.z, vO.z);
     }
 
     @Test

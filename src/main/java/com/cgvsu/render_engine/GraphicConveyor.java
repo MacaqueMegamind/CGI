@@ -1,5 +1,7 @@
 package com.cgvsu.render_engine;
-import javax.vecmath.*;
+import com.cgvsu.math.matrix.*;
+import com.cgvsu.math.vector.*;
+import com.cgvsu.math.point.*;
 
 import static java.lang.Math.*;
 
@@ -26,18 +28,19 @@ public class GraphicConveyor {
         Vector3f resultZ = new Vector3f();
 
         resultZ.sub(target, eye);
-        resultX.cross(up, resultZ);
-        resultY.cross(resultZ, resultX);
+        resultX.crs(up, resultZ);
+        resultY.crs(resultZ, resultX);
 
-        resultX.normalize();
-        resultY.normalize();
-        resultZ.normalize();
+        resultX.nor();
+        resultY.nor();
+        resultZ.nor();
 
         float[] matrix = new float[]{
-                resultX.x, resultY.x, resultZ.x, 0,
-                resultX.y, resultY.y, resultZ.y, 0,
-                resultX.z, resultY.z, resultZ.z, 0,
-                -resultX.dot(eye), -resultY.dot(eye), -resultZ.dot(eye), 1};
+                resultX.x, resultX.y, resultX.z, -resultX.dot(eye),
+                resultY.x, resultY.y, resultY.z, -resultY.dot(eye),
+                resultZ.x, resultZ.y, resultZ.z, -resultZ.dot(eye),
+                0, 0, 0, 1
+                };
         return new Matrix4f(matrix);
     }
 
@@ -48,19 +51,20 @@ public class GraphicConveyor {
             final float farPlane) {
         Matrix4f result = new Matrix4f();
         float tangentMinusOnDegree = (float) (1.0F / (Math.tan(fov * 0.5F)));
-        result.m00 = tangentMinusOnDegree / aspectRatio;
-        result.m11 = tangentMinusOnDegree;
-        result.m22 = (farPlane + nearPlane) / (farPlane - nearPlane);
-        result.m23 = 1.0F;
-        result.m32 = 2 * (nearPlane * farPlane) / (nearPlane - farPlane);
+        result.val[Matrix4f.M11] = tangentMinusOnDegree / aspectRatio;
+        result.val[Matrix4f.M22] = tangentMinusOnDegree;
+        result.val[Matrix4f.M33] = (farPlane + nearPlane) / (farPlane - nearPlane);
+        result.val[Matrix4f.M34] = 1.0F;
+        result.val[Matrix4f.M43] = 2 * (nearPlane * farPlane) / (nearPlane - farPlane);
         return result;
     }
 
-    public static Vector3f multiplyMatrix4ByVector3(final Matrix4f matrix, final Vector3f vertex) {
-        final float x = (vertex.x * matrix.m00) + (vertex.y * matrix.m10) + (vertex.z * matrix.m20) + matrix.m30;
-        final float y = (vertex.x * matrix.m01) + (vertex.y * matrix.m11) + (vertex.z * matrix.m21) + matrix.m31;
-        final float z = (vertex.x * matrix.m02) + (vertex.y * matrix.m12) + (vertex.z * matrix.m22) + matrix.m32;
-        final float w = (vertex.x * matrix.m03) + (vertex.y * matrix.m13) + (vertex.z * matrix.m23) + matrix.m33;
+    public static Vector3f multiplyMatrix4ByVector3(final Matrix4f m, final Vector3f v) {
+
+        final float x = (v.x * m.val[Matrix4f.M11]) + (v.y * m.val[Matrix4f.M21]) + (v.z * m.val[Matrix4f.M31]) + m.val[Matrix4f.M41];
+        final float y = (v.x * m.val[Matrix4f.M12]) + (v.y * m.val[Matrix4f.M22]) + (v.z * m.val[Matrix4f.M32]) + m.val[Matrix4f.M42];
+        final float z = (v.x * m.val[Matrix4f.M13]) + (v.y * m.val[Matrix4f.M23]) + (v.z * m.val[Matrix4f.M33]) + m.val[Matrix4f.M43];
+        final float w = (v.x * m.val[Matrix4f.M14]) + (v.y * m.val[Matrix4f.M24]) + (v.z * m.val[Matrix4f.M34]) + m.val[Matrix4f.M44];
         return new Vector3f(x / w, y / w, z / w);
     }
 
@@ -107,13 +111,13 @@ public class GraphicConveyor {
 
 
         //Scaling
-        matrix4f.m00 *= scaleVector.x;
-        matrix4f.m11 *= scaleVector.y;
-        matrix4f.m22 *= scaleVector.z;
+        matrix4f.val[Matrix4f.M11] *= scaleVector.x;
+        matrix4f.val[Matrix4f.M22] *= scaleVector.y;
+        matrix4f.val[Matrix4f.M33] *= scaleVector.z;
         //Translation
-        matrix4f.m30 = translationVector.x;
-        matrix4f.m31 = translationVector.y;
-        matrix4f.m32 = translationVector.z;
+        matrix4f.val[Matrix4f.M41] = translationVector.x;
+        matrix4f.val[Matrix4f.M42] = translationVector.y;
+        matrix4f.val[Matrix4f.M43] = translationVector.z;
 
 
         return matrix4f;

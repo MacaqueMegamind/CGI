@@ -6,8 +6,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.image.Image;
 
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector3f;
+import com.cgvsu.math.matrix.Matrix4f;
+import com.cgvsu.math.vector.Vector3f;
 import java.util.Objects;
 
 public class ChangedModel extends Model {

@@ -393,4 +393,13 @@ public class Matrix4f implements Matrix<Matrix4f> {
     public int hashCode() {
         return Arrays.hashCode(val);
     }
+
+    @Override
+    public String toString(){
+        return
+                    val[M11] + ", " + val[M12] + ", " + val[M13] + ", " + val[M14] + "\n"+
+                    val[M21] + ", " + val[M22] + ", " + val[M23] + ", " + val[M24] + "\n"+
+                    val[M31] + ", " + val[M32] + ", " + val[M33] + ", " + val[M34] + "\n"+
+                    val[M41] + ", " + val[M42] + ", " + val[M43] + ", " + val[M44];
+    }
 }

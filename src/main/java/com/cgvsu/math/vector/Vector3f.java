@@ -1,5 +1,7 @@
 package com.cgvsu.math.vector;
 
+import com.cgvsu.math.matrix.Matrix4f;
+
 import java.util.Objects;
 
 /**
@@ -428,6 +430,14 @@ public class Vector3f implements Vector<Vector3f> {
         return this;
     }
 
+    public Vector3f sub(Vector3f v1, Vector3f v2){
+        this.x = v1.x - v2.x;
+        this.y = v1.y - v2.y;
+        this.z = v1.z - v2.z;
+        return this;
+
+    }
+
     /**
      * Subtracts the given vector from this vector.
      *
@@ -630,6 +640,15 @@ public class Vector3f implements Vector<Vector3f> {
         return this;
     }
 
+    public Vector3f mul(Matrix4f m){
+        Vector4f v4 = new Vector4f(new float[]{x,y,z,1});
+        v4.mul(m);
+
+        this.x = v4.x;
+        this.y = v4.y;
+        this.z = v4.z;
+        return this;
+    }
     @Override
     public float dot(Vector3f v) {
         return this.x * v.x + this.y * v.y + this.z * v.z;
@@ -648,6 +667,13 @@ public class Vector3f implements Vector<Vector3f> {
         this.x = ay * v.z - az * v.y;
         this.y = az * v.x - ax * v.z;
         this.z = ax * v.y - ay * v.x;
+        return this;
+    }
+
+    public Vector3f crs(Vector3f v1, Vector3f v2){
+        this.x = v1.y * v2.z - v1.z * v2.y;
+        this.y = v2.x * v1.z - v2.z * v1.x;
+        this.z = v1.x * v2.y - v1.y * v2.x;
         return this;
     }
 

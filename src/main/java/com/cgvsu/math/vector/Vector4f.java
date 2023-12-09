@@ -730,16 +730,17 @@ public class Vector4f implements Vector<Vector4f> {
         return this;
     }
 
-    public void mul(Matrix4f m) {
-        float v0 = m.val[0] * x + m.val[1] * y + m.val[2] * z + m.val[3] * w;
-        float v1 = m.val[4] * x + m.val[5] * y + m.val[6] * z + m.val[7] * w;
-        float v2 = m.val[8] * x + m.val[9] * y + m.val[10] * z + m.val[11] * w;
-        float v3 = m.val[12] * x + m.val[13] * y + m.val[14] * z + m.val[15] * w;
+    public Vector4f mul(Matrix4f m) {
+        float v0 = m.val[Matrix4f.M11] * x + m.val[Matrix4f.M21] * y + m.val[Matrix4f.M31] * z + m.val[Matrix4f.M41] * w;
+        float v1 = m.val[Matrix4f.M12] * x + m.val[Matrix4f.M22] * y + m.val[Matrix4f.M32] * z + m.val[Matrix4f.M42] * w;
+        float v2 = m.val[Matrix4f.M13] * x + m.val[Matrix4f.M23] * y + m.val[Matrix4f.M33] * z + m.val[Matrix4f.M43] * w;
+        float v3 = m.val[Matrix4f.M14] * x + m.val[Matrix4f.M24] * y + m.val[Matrix4f.M34] * z + m.val[Matrix4f.M44] * w;
 
         this.x = v0;
         this.y = v1;
         this.z = v2;
         this.w = v3;
+        return this;
     }
 
     @Override
