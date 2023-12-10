@@ -1,6 +1,6 @@
 package com.cgvsu;
 
-import com.cgvsu.model.ChangedModel;
+import com.cgvsu.model.Model;
 import com.cgvsu.render_engine.Camera;
 
 import java.util.ArrayList;
@@ -10,9 +10,9 @@ import java.util.List;
 public class Scene {
     String currentModel;
 
-    public ArrayList<ChangedModel> loadedMeshes = new ArrayList<>();
+    public ArrayList<Model> loadedMeshes = new ArrayList<>();
 
-    public HashMap<String, ChangedModel> loadedModels = new HashMap<>();
+    public HashMap<String, Model> loadedModels = new HashMap<>();
 
     private List<Camera> camera = new ArrayList<>();
 
@@ -20,7 +20,7 @@ public class Scene {
         return currentModel;
     }
 
-    public HashMap<String, ChangedModel> getLoadedModels() {
+    public HashMap<String, Model> getLoadedModels() {
         return loadedModels;
     }
 
@@ -32,7 +32,7 @@ public class Scene {
         this.currentModel = currentModel;
     }
 
-    public void setLoadedModels(HashMap<String, ChangedModel> loadedModels) {
+    public void setLoadedModels(HashMap<String, Model> loadedModels) {
         this.loadedModels = loadedModels;
     }
 
@@ -40,7 +40,7 @@ public class Scene {
         this.camera = camera;
     }
 
-    public List<ChangedModel> getLoadedMeshes() {
+    public List<Model> getLoadedMeshes() {
         return loadedMeshes;
     }
 }

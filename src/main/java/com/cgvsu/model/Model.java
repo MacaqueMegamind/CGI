@@ -19,6 +19,8 @@ public class Model {
 
     }
 
+
+
     public ArrayList<Vector3f> getVertices() {
         return vertices;
     }

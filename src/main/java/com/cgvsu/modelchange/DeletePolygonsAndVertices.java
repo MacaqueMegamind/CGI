@@ -1,10 +1,7 @@
 package com.cgvsu.modelchange;
-
 import com.cgvsu.math.vector.Vector3f;
 import com.cgvsu.model.Model;
 import com.cgvsu.model.Polygon;
-import com.cgvsu.objreader.ObjReaderException;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
