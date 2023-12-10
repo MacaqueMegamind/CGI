@@ -55,12 +55,20 @@ public class ObjReader {
 	}
 
 	// Всем методам кроме основного я поставил модификатор доступа protected, чтобы обращаться к ним в тестах
+
+	/**
+	 * Преобразование обычных вершин
+	 */
 	protected static Vector3f parseVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
 		try {
-			return new Vector3f(
-					Float.parseFloat(wordsInLineWithoutToken.get(0)),
-					Float.parseFloat(wordsInLineWithoutToken.get(1)),
-					Float.parseFloat(wordsInLineWithoutToken.get(2)));
+			if (wordsInLineWithoutToken.size() > 3) {
+				throw new ObjReaderException("Too much vertex arguments.", lineInd);
+			}
+			float x = Float.parseFloat(wordsInLineWithoutToken.get(0));
+			float y = Float.parseFloat(wordsInLineWithoutToken.get(1));
+			float z = Float.parseFloat(wordsInLineWithoutToken.get(2));
+
+			return new Vector3f(x, y, z);
 
 		} catch(NumberFormatException e) {
 			throw new ObjReaderException("Failed to parse float value.", lineInd);
@@ -69,12 +77,19 @@ public class ObjReader {
 			throw new ObjReaderException("Too few vertex arguments.", lineInd);
 		}
 	}
-
+	/**
+	 * Преобразование текстурных вершин
+	 */
 	protected static Vector2f parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
 		try {
-			return new Vector2f(
-					Float.parseFloat(wordsInLineWithoutToken.get(0)),
-					Float.parseFloat(wordsInLineWithoutToken.get(1)));
+			if (wordsInLineWithoutToken.size()>2) {
+				throw new ObjReaderException("Too much texture vertex arguments.", lineInd);
+		}
+
+			float x = Float.parseFloat(wordsInLineWithoutToken.get(0));
+			float y = Float.parseFloat(wordsInLineWithoutToken.get(1));
+
+			return new Vector2f(x, y);
 
 		} catch(NumberFormatException e) {
 			throw new ObjReaderException("Failed to parse float value.", lineInd);
@@ -83,22 +98,30 @@ public class ObjReader {
 			throw new ObjReaderException("Too few texture vertex arguments.", lineInd);
 		}
 	}
-
+	/**
+	 * Преобразование нормалей
+	 */
 	protected static Vector3f parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
 		try {
-			return new Vector3f(
-					Float.parseFloat(wordsInLineWithoutToken.get(0)),
-					Float.parseFloat(wordsInLineWithoutToken.get(1)),
-					Float.parseFloat(wordsInLineWithoutToken.get(2)));
+			if (wordsInLineWithoutToken.size() > 3) {
+				throw new ObjReaderException("Too much vertex arguments.", lineInd);
+			}
+			float x = Float.parseFloat(wordsInLineWithoutToken.get(0));
+			float y = Float.parseFloat(wordsInLineWithoutToken.get(1));
+			float z = Float.parseFloat(wordsInLineWithoutToken.get(2));
+
+			return new Vector3f(x, y, z);
 
 		} catch(NumberFormatException e) {
 			throw new ObjReaderException("Failed to parse float value.", lineInd);
 
 		} catch(IndexOutOfBoundsException e) {
-			throw new ObjReaderException("Too few normal arguments.", lineInd);
+			throw new ObjReaderException("Too few vertex arguments.", lineInd);
 		}
 	}
-
+	/**
+	 * Преобразование полигонов
+	 */
 	protected static Polygon parseFace(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
 		ArrayList<Integer> onePolygonVertexIndices = new ArrayList<Integer>();
 		ArrayList<Integer> onePolygonTextureVertexIndices = new ArrayList<Integer>();
