@@ -29,6 +29,7 @@ public class Model {
         this.vertices = vertices;
     }
 
+    public void setPolygons(ArrayList<Polygon> polygons) { this.polygons = polygons; }
     public ArrayList<Polygon> getPolygons() {
         return polygons;
     }

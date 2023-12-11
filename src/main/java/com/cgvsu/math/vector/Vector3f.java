@@ -383,6 +383,12 @@ public class Vector3f implements Vector<Vector3f> {
         return this;
     }
 
+    public static Vector3f fromTwoPoints(Vector3f vertex1, Vector3f vertex2) {
+        return new Vector3f(vertex2.x - vertex1.x,
+                vertex2.y - vertex1.y,
+                vertex2.z - vertex1.z);
+    }
+
     @Override
     public Vector3f add(Vector3f v) {
         this.x += v.x;

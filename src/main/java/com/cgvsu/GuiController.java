@@ -5,6 +5,8 @@ import com.cgvsu.render_engine.transformation.AffineTransformation;
 import com.cgvsu.render_engine.transformation.DefaultRotate;
 import com.cgvsu.render_engine.transformation.DefaultScale;
 import com.cgvsu.render_engine.transformation.DefaultTransition;
+import com.cgvsu.triangulation.CalculationNormals;
+import com.cgvsu.triangulation.Triangulation;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -84,6 +86,10 @@ public class GuiController {
         try {
             String fileContent = Files.readString(fileName);
             mesh = ObjReader.read(fileContent);
+
+            Triangulation.triangulateModel(mesh);
+            CalculationNormals.calculateNormals(mesh);
+
             // todo: обработка ошибок
         } catch (IOException exception) {
 
