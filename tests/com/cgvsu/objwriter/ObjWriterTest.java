@@ -34,7 +34,7 @@ public class ObjWriterTest {
 
     @Test
     public void testCrashModel()  {
-        assertThrows(AssertionError.class, () -> someMethod());
+        assertThrows(AssertionError.class, this::changeModel);
     }
 
     private static class TestStrings {
@@ -50,7 +50,8 @@ public class ObjWriterTest {
                    """;
         private static final String TEST_2 = "";
     }
-    private void someMethod() throws IOException {
+
+    private void changeModel() throws IOException {
         Model model = new Model();
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);

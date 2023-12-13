@@ -1,5 +1,6 @@
 package com.cgvsu.gui;
 
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -7,11 +8,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javafx.scene.canvas.Canvas;
 
 public class FileUtils {
-    public record FileInfo(String content, String name) {
-    }
+    public record FileInfo(String content, String name) {}
+    public record DirInfo(Path path) {}
 
     public FileInfo fileChooserOpen(Canvas canvas) {
         FileChooser fileChooser = new FileChooser();
@@ -29,6 +32,18 @@ public class FileUtils {
             return new FileInfo(Files.readString(fileName), file.getName());
             // todo: обработка ошибок
         } catch (IOException exception) {return null;}
+    }
+
+    public DirInfo dirChooserOpen(Canvas canvas) {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Load Directory");
+
+        File directory = directoryChooser.showDialog((Stage) canvas.getScene().getWindow());
+        if (directory == null) {
+            return null;
+        }
+
+        return new DirInfo(Paths.get(directory.getAbsolutePath()));
     }
 
 }

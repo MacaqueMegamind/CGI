@@ -2,6 +2,7 @@ package com.cgvsu.gui;
 
 import com.cgvsu.model.Model;
 import com.cgvsu.objreader.ObjReader;
+import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.CalculationNormals;
@@ -19,6 +20,9 @@ import javafx.util.Duration;
 
 import com.cgvsu.math.vector.Vector3f;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -135,8 +139,12 @@ public class GuiController {
     }
 
     @FXML
-    public void handleExportModel() {
-
+    public void handleExportModel() throws IOException {
+        FileUtils.DirInfo dir = new FileUtils().dirChooserOpen(canvas);
+        TreeViewController.ItemWrap itemWrap = treeViewController.getItemByMesh(mesh);
+        Path path = dir.path().resolve(itemWrap.getName());
+        FileWriter fileWriter = new FileWriter(path.toString());
+        ObjWriter.write(mesh, fileWriter);
     }
 
     @FXML

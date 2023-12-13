@@ -111,5 +111,14 @@ public class TreeViewController {
         }
     }
 
+    public ItemWrap getItemByMesh(Model model) {
+        for (TreeItem<ItemWrap> item : objectRoot.getChildren()) {
+            if (item.getValue().getModel() != null && item.getValue().getModel().equals(model)) {
+                return item.getValue();
+            }
+        }
+        return null;
+    }
+
 }
 
