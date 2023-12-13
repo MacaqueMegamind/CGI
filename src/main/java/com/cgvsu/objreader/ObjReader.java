@@ -82,7 +82,8 @@ public class ObjReader {
 	 */
 	protected static Vector2f parseTextureVertex(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
 		try {
-			if (wordsInLineWithoutToken.size()>2) {
+			if (wordsInLineWithoutToken.size()>2 &&
+					Float.parseFloat(wordsInLineWithoutToken.get(2))>0) {
 				throw new ObjReaderException("Too much texture vertex arguments.", lineInd);
 		}
 
@@ -103,7 +104,8 @@ public class ObjReader {
 	 */
 	protected static Vector3f parseNormal(final ArrayList<String> wordsInLineWithoutToken, int lineInd) {
 		try {
-			if (wordsInLineWithoutToken.size() > 3) {
+			if (wordsInLineWithoutToken.size() > 3 &&
+					Float.parseFloat(wordsInLineWithoutToken.get(3))>0) {
 				throw new ObjReaderException("Too much vertex arguments.", lineInd);
 			}
 			float x = Float.parseFloat(wordsInLineWithoutToken.get(0));
