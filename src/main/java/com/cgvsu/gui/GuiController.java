@@ -1,29 +1,30 @@
 package com.cgvsu.gui;
 
 import com.cgvsu.model.Model;
+import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.RenderEngine;
+import com.cgvsu.triangulation.CalculationNormals;
+import com.cgvsu.triangulation.Triangulation;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
 
 import com.cgvsu.math.vector.Vector3f;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class GuiController {
 
     final private float TRANSLATION = 0.5F;
-
-    @FXML
-    private BorderPane borderPane;
 
     @FXML
     private ScrollPane topScrollPane;
@@ -34,25 +35,28 @@ public class GuiController {
     @FXML
     private Canvas canvas;
 
-    private TreeView<TreeViewController.ItemWrap> treeView = new TreeView<>();
+    @FXML
+    private AnchorPane anchorPaneCanvas;
 
-    private TreeViewController treeViewController = new TreeViewController(treeView);
+    private final TreeView<TreeViewController.ItemWrap> treeView = new TreeView<>();
+
+    private final TreeViewController treeViewController = new TreeViewController(treeView);
 
     private Model mesh = null;
 
-    private Camera camera = new Camera(
-            new Vector3f(0, 00, 100),
+    private final Camera camera = new Camera(
+            new Vector3f(0, 0, 100),
             new Vector3f(0, 0, 0),
             1.0F, 1, 0.01F, 100);
 
-    private Timeline timeline;
+    private final Map<KeyCode, Runnable> keyActions = new HashMap<>();
 
     @FXML
     private void initialize() {
-        borderPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
-        borderPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+        anchorPaneCanvas.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
+        anchorPaneCanvas.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
 
-        timeline = new Timeline();
+        Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
 
         KeyFrame frame = new KeyFrame(Duration.millis(15), event -> {
@@ -63,7 +67,7 @@ public class GuiController {
             camera.setAspectRatio((float) (width / height));
 
             if (mesh != null) {
-                //RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
+                RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
             }
         });
 
@@ -73,47 +77,100 @@ public class GuiController {
         topScrollPane.setContent(treeView);
         treeView.prefHeightProperty().bind(topScrollPane.heightProperty());
         treeView.prefWidthProperty().bind(topScrollPane.widthProperty());
-
         treeViewController.initialize();
-    }
 
-    @FXML
-    public void handleUploadModel(ActionEvent actionEvent) {
+        keyActions.put(KeyCode.UP, () -> camera.movePosition(new Vector3f(0, TRANSLATION, 0)));
+        keyActions.put(KeyCode.DOWN, () -> camera.movePosition(new Vector3f(0, -TRANSLATION, 0)));
+        keyActions.put(KeyCode.RIGHT, () -> camera.movePosition(new Vector3f(-TRANSLATION, 0, 0)));
+        keyActions.put(KeyCode.LEFT, () -> camera.movePosition(new Vector3f(TRANSLATION, 0, 0)));
+        keyActions.put(KeyCode.W, () -> camera.movePosition(new Vector3f(0, 0, -TRANSLATION)));
+        keyActions.put(KeyCode.S, () -> camera.movePosition(new Vector3f(0, 0, TRANSLATION)));
 
-    }
+        canvas.setOnKeyPressed(e -> {
+            Runnable action = keyActions.get(e.getCode());
+            if (action != null) {
+                action.run();
+            }
+        });
 
-    @FXML
-    public void handleAddModel(ActionEvent actionEvent) {
+        canvas.setFocusTraversable(true);
+        canvas.setOnMouseClicked(event -> canvas.requestFocus());
 
-    }
+        treeView.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                treeViewController.deleteSelectedItem();
+                mesh = null;
+            } else if (event.getCode() == KeyCode.ENTER) {
+                mesh = treeViewController.getSelectedItem().getValue().getModel();
+            }
+        });
 
-    @FXML
-    public void handleExportModel(ActionEvent actionEvent) {
-
-    }
-
-    @FXML
-    public void handleDeleteVertices(ActionEvent actionEvent) {
-
-    }
-
-    @FXML
-    public void handleShowMesh(ActionEvent actionEvent) {
-
-    }
-
-    @FXML
-    public void handleUseLight(ActionEvent actionEvent) {
-
-    }
-
-    @FXML
-    public void handleInterfaceMode(ActionEvent actionEvent) {
+        treeView.setFocusTraversable(false);
+        treeView.setOnMouseClicked(mouseEvent -> treeView.requestFocus());
 
     }
 
+
     @FXML
-    public void handleInfo(ActionEvent actionEvent) {
+    public void handleUploadModel() {
+        FileUtils.FileInfo file = new FileUtils().fileChooserOpen(canvas);
+
+        mesh = ObjReader.read(file.content());
+        Triangulation.triangulateModel(mesh);
+        CalculationNormals.calculateNormals(mesh);
+        treeViewController.deleteAllObjects();
+        treeViewController.addItem(new TreeViewController.ItemWrap(mesh, file.name(),
+                TreeViewController.ItemType.OBJECT));
+    }
+
+    @FXML
+    public void handleAddModel() {
+        FileUtils.FileInfo file = new FileUtils().fileChooserOpen(canvas);
+
+        mesh = ObjReader.read(file.content());
+        Triangulation.triangulateModel(mesh);
+        CalculationNormals.calculateNormals(mesh);
+        treeViewController.addItem(new TreeViewController.ItemWrap(mesh, file.name(),
+                TreeViewController.ItemType.OBJECT));
+    }
+
+    @FXML
+    public void handleExportModel() {
+
+    }
+
+    @FXML
+    public void handleDeleteVertices() {
+
+    }
+
+    @FXML
+    public void handleShowMesh() {
+
+    }
+
+    @FXML
+    public void handleUseLight() {
+
+    }
+
+    @FXML
+    public void handleInterfaceMode() {
+
+    }
+
+    @FXML
+    public void handleInfo() {
+
+    }
+
+    @FXML
+    public void handleUploadTexture() {
+
+    }
+
+    @FXML
+    public void handleDeleteTexture() {
 
     }
 }

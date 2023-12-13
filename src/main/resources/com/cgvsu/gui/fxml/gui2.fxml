@@ -32,20 +32,15 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" fx:id="borderPane" fx:controller="com.cgvsu.gui.GuiController" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.gui.GuiController">
     <center>
         <SplitPane dividerPositions="0.6787948290241869" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="391.0">
+                <AnchorPane fx:id="anchorPaneCanvas" minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="391.0">
                     <children>
                         <Canvas fx:id="canvas" height="1052.0" width="1304.0" />
                     </children>
@@ -75,6 +70,7 @@
                         <MenuItem fx:id="onOpenModelMenuItemClick" mnemonicParsing="false" onAction="#handleUploadModel" text="Загрузить" />
                         <MenuItem fx:id="addModel" mnemonicParsing="false" onAction="#handleAddModel" text="Добавить" />
                         <MenuItem fx:id="exportModel" mnemonicParsing="false" onAction="#handleExportModel" text="Экспорт" />
+                  <MenuItem fx:id="uploadTexture" mnemonicParsing="false" onAction="#handleUploadTexture" text="Добавить текстуру" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Редактировать">
@@ -82,6 +78,7 @@
                         <MenuItem fx:id="deleteVertices" mnemonicParsing="false" onAction="#handleDeleteVertices" text="Удаление вершин/полигонов" />
                         <MenuItem fx:id="showMesh" mnemonicParsing="false" onAction="#handleShowMesh" text="Показать полигональную сетку" />
                         <MenuItem fx:id="useLight" mnemonicParsing="false" onAction="#handleUseLight" text="Использовать освещение" />
+                  <MenuItem fx:id="deleteTexture" mnemonicParsing="false" onAction="#handleDeleteTexture" text="Удалить текстуру" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Просмотр">

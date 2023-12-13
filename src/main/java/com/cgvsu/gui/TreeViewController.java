@@ -8,28 +8,21 @@ import java.awt.*;
 
 public class TreeViewController {
 
-    private enum ItemType {
+    public enum ItemType {
         CAMERA,
         OBJECT
     }
 
-    public class ItemWrap {
-        private Model model;
-        private String name;
-        private ItemType itemType;
+    public static class ItemWrap {
+        private final Model model;
+        private final String name;
+        private final ItemType itemType;
         private Color color;
 
         public ItemWrap(Model model, String name, ItemType itemType) {
             this.model = model;
             this.name = name;
             this.itemType = itemType;
-            this.color = null;
-        }
-
-        public ItemWrap(Model model, String name) {
-            this.model = model;
-            this.name = name;
-            this.itemType = null;
             this.color = null;
         }
 
@@ -79,6 +72,26 @@ public class TreeViewController {
 
         rootItem.getChildren().addAll(cameraRoot, objectRoot);
         treeView.setRoot(rootItem);
+    }
+
+    public void deleteSelectedItem() {
+        TreeItem<ItemWrap> selectedItem = treeView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null && selectedItem.getParent() != null) {
+            // Удаляем элемент из родительского элемента
+            selectedItem.getParent().getChildren().remove(selectedItem);
+        }
+    }
+
+    public void deleteAllObjects() {
+        objectRoot.getChildren().clear();
+    }
+
+    public void deleteAllCameras() {
+        cameraRoot.getChildren().clear();
+    }
+
+    public TreeItem<ItemWrap> getSelectedItem() {
+        return treeView.getSelectionModel().getSelectedItem();
     }
 
     public int getCameraCount() {
