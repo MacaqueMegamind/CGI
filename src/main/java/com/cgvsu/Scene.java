@@ -10,6 +10,8 @@ import java.util.List;
 public class Scene {
     String currentModel;
 
+    Model mergeModel;
+
     public ArrayList<Model> loadedMeshes = new ArrayList<>();
 
     public HashMap<String, Model> loadedModels = new HashMap<>();
@@ -42,5 +44,25 @@ public class Scene {
 
     public List<Model> getLoadedMeshes() {
         return loadedMeshes;
+    }
+
+    public void addMesh(Model model){
+            loadedMeshes.add(model);
+            mergeModel();
+    }
+
+    public void deleteMesh(Model model){
+        loadedMeshes.remove(model);
+        mergeModel();
+    }
+    private void mergeModel (){
+        Model mergeModel = new Model();
+        for(Model model: loadedMeshes) {
+            mergeModel.vertices.addAll(model.vertices);
+            mergeModel.polygons.addAll(model.polygons);
+            mergeModel.normals.addAll(model.normals);
+            mergeModel.textureVertices.addAll(model.textureVertices);
+        }
+        this.mergeModel = mergeModel;
     }
 }
