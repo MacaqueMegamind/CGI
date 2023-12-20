@@ -1,6 +1,7 @@
 package com.cgvsu.render_engine;
 import com.cgvsu.math.vector.Vector3f;
 import com.cgvsu.math.matrix.Matrix4f;
+import com.cgvsu.render_engine.transformation.AffineTransformation;
 
 public class Camera {
 
@@ -18,6 +19,8 @@ public class Camera {
         this.nearPlane = nearPlane;
         this.farPlane = farPlane;
     }
+
+    public AffineTransformation af = new AffineTransformation();
 
     public void setPosition(final Vector3f position) {
         this.position = position;

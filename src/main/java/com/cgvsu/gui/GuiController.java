@@ -15,7 +15,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -26,6 +25,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.cgvsu.render_engine.GraphicConveyor.rotateModel;
 
 public class GuiController {
 
@@ -48,7 +49,6 @@ public class GuiController {
     private final TreeViewController treeViewController = new TreeViewController(treeView);
 
     private double mouseX, mouseY;
-
 
     private Model mesh = null;
 
@@ -76,7 +76,7 @@ public class GuiController {
 
             if (event.isPrimaryButtonDown()) {
                 // Rotate
-                camera.moveRotation(new Vector3f((float) deltaX, (float) deltaY, 0));
+                rotateModel((float) deltaY, (float) deltaX, 0, mesh, camera);
             } else if (event.isSecondaryButtonDown()) {
                 // Translate
                 camera.movePosition(new Vector3f((float) deltaX, (float) -deltaY, 0));
@@ -85,10 +85,6 @@ public class GuiController {
             mouseX = event.getSceneX();
             mouseY = event.getSceneY();
         });
-
-        // Обработка событий клавиатуры
-        canvas.setOnKeyPressed(this::handleKeyPress);
-
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -113,12 +109,12 @@ public class GuiController {
         treeView.prefWidthProperty().bind(topScrollPane.widthProperty());
         treeViewController.initialize();
 
-        keyActions.put(KeyCode.UP, () -> camera.movePosition(new Vector3f(0, TRANSLATION, 0)));
-        keyActions.put(KeyCode.DOWN, () -> camera.movePosition(new Vector3f(0, -TRANSLATION, 0)));
-        keyActions.put(KeyCode.RIGHT, () -> camera.movePosition(new Vector3f(-TRANSLATION, 0, 0)));
-        keyActions.put(KeyCode.LEFT, () -> camera.movePosition(new Vector3f(TRANSLATION, 0, 0)));
-        keyActions.put(KeyCode.W, () -> camera.movePosition(new Vector3f(0, 0, -TRANSLATION)));
-        keyActions.put(KeyCode.S, () -> camera.movePosition(new Vector3f(0, 0, TRANSLATION)));
+        keyActions.put(KeyCode.UP, () -> rotateModel(-2*TRANSLATION, 0, 0, mesh, camera));
+        keyActions.put(KeyCode.DOWN, () -> rotateModel(2*TRANSLATION, 0, 0, mesh, camera));
+        keyActions.put(KeyCode.RIGHT, () -> rotateModel(0, 2*TRANSLATION, 0, mesh, camera));
+        keyActions.put(KeyCode.LEFT, () -> rotateModel(0, -2*TRANSLATION, 0, mesh, camera));
+        keyActions.put(KeyCode.W, () -> rotateModel(0, 0, -2*TRANSLATION, mesh, camera));
+        keyActions.put(KeyCode.S, () -> rotateModel(0, 0, -2*TRANSLATION, mesh, camera));
 
         canvas.setOnKeyPressed(e -> {
             Runnable action = keyActions.get(e.getCode());
@@ -142,29 +138,6 @@ public class GuiController {
         treeView.setFocusTraversable(false);
         treeView.setOnMouseClicked(mouseEvent -> treeView.requestFocus());
 
-    }
-
-    private void handleKeyPress(KeyEvent event) {
-        switch (event.getCode()) {
-            case W:
-                camera.movePosition(new Vector3f(0, 0, -TRANSLATION));
-                break;
-            case S:
-                camera.movePosition(new Vector3f(0, 0, TRANSLATION));
-                break;
-            case A:
-                camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
-                break;
-            case D:
-                camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
-                break;
-            case Q:
-                camera.movePosition(new Vector3f(0, TRANSLATION, 0));
-                break;
-            case E:
-                camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
-                break;
-        }
     }
 
 
