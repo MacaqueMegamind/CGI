@@ -38,6 +38,14 @@ public class Camera {
         return position;
     }
 
+    public float getFov() {
+        return fov;
+    }
+
+    public void setFov(float fov) {
+        this.fov = fov;
+    }
+
     public Vector3f getTarget() {
         return target;
     }

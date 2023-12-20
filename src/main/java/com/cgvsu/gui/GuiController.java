@@ -31,6 +31,8 @@ import static com.cgvsu.render_engine.GraphicConveyor.rotateModel;
 public class GuiController {
 
     final private float TRANSLATION = 0.5F;
+    final private float fovDelta = 0.05f;
+    final private float maxFov = 3f;
 
     @FXML
     private ScrollPane topScrollPane;
@@ -55,7 +57,7 @@ public class GuiController {
     private final Camera camera = new Camera(
             new Vector3f(0, 0, 100),
             new Vector3f(0, 0, 0),
-            1.0F, 1, 0.01F, 100);
+            1F, 1, 0.01F, 100);
 
     private final Map<KeyCode, Runnable> keyActions = new HashMap<>();
 
@@ -84,6 +86,23 @@ public class GuiController {
 
             mouseX = event.getSceneX();
             mouseY = event.getSceneY();
+        });
+
+        canvas.setOnScroll(scrollEvent -> {
+
+            float newFov = camera.getFov();
+
+            if (scrollEvent.getDeltaY() < 0){
+                if (newFov <= maxFov){
+                    newFov += fovDelta;
+                }
+            } else {
+                if (newFov >= fovDelta){
+                    newFov -= fovDelta;
+                }
+            }
+
+            camera.setFov(newFov);
         });
 
         Timeline timeline = new Timeline();
