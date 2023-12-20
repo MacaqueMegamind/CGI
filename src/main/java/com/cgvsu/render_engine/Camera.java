@@ -55,6 +55,10 @@ public class Camera {
         return GraphicConveyor.perspective(fov, aspectRatio, nearPlane, farPlane);
     }
 
+    public void moveRotation(Vector3f deltaRotation) {
+        rotation.add(deltaRotation);
+    }
+    private Vector3f rotation = new Vector3f(0, 0, 0);
     private Vector3f position;
     private Vector3f target;
     private float fov;

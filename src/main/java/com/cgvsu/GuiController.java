@@ -13,6 +13,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
@@ -44,12 +45,39 @@ public class GuiController {
             new Vector3f(0, 0, 0),
             1.0F, 1, 0.01F, 100);
 
+    private double mouseX, mouseY;
+
+
     private Timeline timeline;
 
     @FXML
     private void initialize() {
         anchorPane.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPane.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+
+        canvas.setOnMousePressed(event -> {
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
+
+        canvas.setOnMouseDragged(event -> {
+            double deltaX = (event.getSceneX() - mouseX);
+            double deltaY = (event.getSceneY() - mouseY);
+
+            if (event.isPrimaryButtonDown()) {
+                // Rotate
+                camera.moveRotation(new Vector3f((float) deltaX, (float) deltaY, 0));
+            } else if (event.isSecondaryButtonDown()) {
+                // Translate
+                camera.movePosition(new Vector3f((float) deltaX, (float) -deltaY, 0));
+            }
+
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
+
+        // Обработка событий клавиатуры
+        canvas.setOnKeyPressed(this::handleKeyPress);
 
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -124,5 +152,29 @@ public class GuiController {
     @FXML
     public void handleCameraDown(ActionEvent actionEvent) {
         camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
+    }
+
+    // Обработка событий клавиатуры
+    private void handleKeyPress(KeyEvent event) {
+        switch (event.getCode()) {
+            case W:
+                camera.movePosition(new Vector3f(0, 0, -TRANSLATION));
+                break;
+            case S:
+                camera.movePosition(new Vector3f(0, 0, TRANSLATION));
+                break;
+            case A:
+                camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
+                break;
+            case D:
+                camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
+                break;
+            case Q:
+                camera.movePosition(new Vector3f(0, TRANSLATION, 0));
+                break;
+            case E:
+                camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
+                break;
+        }
     }
 }

@@ -15,6 +15,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -46,6 +47,9 @@ public class GuiController {
 
     private final TreeViewController treeViewController = new TreeViewController(treeView);
 
+    private double mouseX, mouseY;
+
+
     private Model mesh = null;
 
     private final Camera camera = new Camera(
@@ -59,6 +63,32 @@ public class GuiController {
     private void initialize() {
         anchorPaneCanvas.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPaneCanvas.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+
+
+        canvas.setOnMousePressed(event -> {
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
+
+        canvas.setOnMouseDragged(event -> {
+            double deltaX = (event.getSceneX() - mouseX);
+            double deltaY = (event.getSceneY() - mouseY);
+
+            if (event.isPrimaryButtonDown()) {
+                // Rotate
+                camera.moveRotation(new Vector3f((float) deltaX, (float) deltaY, 0));
+            } else if (event.isSecondaryButtonDown()) {
+                // Translate
+                camera.movePosition(new Vector3f((float) deltaX, (float) -deltaY, 0));
+            }
+
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
+
+        // Обработка событий клавиатуры
+        canvas.setOnKeyPressed(this::handleKeyPress);
+
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -112,6 +142,29 @@ public class GuiController {
         treeView.setFocusTraversable(false);
         treeView.setOnMouseClicked(mouseEvent -> treeView.requestFocus());
 
+    }
+
+    private void handleKeyPress(KeyEvent event) {
+        switch (event.getCode()) {
+            case W:
+                camera.movePosition(new Vector3f(0, 0, -TRANSLATION));
+                break;
+            case S:
+                camera.movePosition(new Vector3f(0, 0, TRANSLATION));
+                break;
+            case A:
+                camera.movePosition(new Vector3f(TRANSLATION, 0, 0));
+                break;
+            case D:
+                camera.movePosition(new Vector3f(-TRANSLATION, 0, 0));
+                break;
+            case Q:
+                camera.movePosition(new Vector3f(0, TRANSLATION, 0));
+                break;
+            case E:
+                camera.movePosition(new Vector3f(0, -TRANSLATION, 0));
+                break;
+        }
     }
 
 
