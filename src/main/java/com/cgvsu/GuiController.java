@@ -119,8 +119,9 @@ public class GuiController {
             CalculationNormals.calculateNormals(mesh);
 
             // todo: обработка ошибок
-        } catch (IOException exception) {
-
+        } catch (Exception exception) {
+            Error_Processing error_processing = new Error_Processing();
+            error_processing.showErrorDialog(exception, getClass().getSimpleName());
         }
     }
 

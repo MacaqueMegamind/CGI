@@ -1,5 +1,6 @@
 package com.cgvsu.gui;
 
+import com.cgvsu.Error_Processing;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -31,7 +32,11 @@ public class FileUtils {
         try {
             return new FileInfo(Files.readString(fileName), file.getName());
             // todo: обработка ошибок
-        } catch (IOException exception) {return null;}
+        } catch (IOException exception){
+            Error_Processing error_processing = new Error_Processing();
+            error_processing.showErrorDialog(exception, getClass().getSimpleName());
+            return null;
+        }
     }
 
     public DirInfo dirChooserOpen(Canvas canvas) {
