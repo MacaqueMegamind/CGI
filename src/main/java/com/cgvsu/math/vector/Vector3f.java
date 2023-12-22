@@ -797,4 +797,7 @@ public class Vector3f implements Vector<Vector3f> {
     public void setZ(float z) {
         this.z = z;
     }
+    public Vector2f cut(){
+        return new Vector2f(x, y);
+    }
 }

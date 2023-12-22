@@ -72,5 +72,9 @@ public class GraphicConveyor {
         return new Point2f(vertex.x * width + width / 2.0F, -vertex.y * height + height / 2.0F);
     }
 
+    public static Vector3f vertexToVector(final Vector3f vertex, final int width, final int height){
+        return new Vector3f(vertex.x * width + width / 2.0F, -vertex.y * height + height / 2.0F, vertex.z);
+    }
+
 
 }

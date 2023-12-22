@@ -1,10 +1,13 @@
 package com.cgvsu.gui;
 
 import com.cgvsu.model.Model;
+import com.cgvsu.model.Texture;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.RenderEngine;
+import com.cgvsu.render_engine.transformation.AffineTransformation;
+import com.cgvsu.render_engine.transformation.DefaultScale;
 import com.cgvsu.triangulation.CalculationNormals;
 import com.cgvsu.triangulation.Triangulation;
 import javafx.animation.Animation;
@@ -21,9 +24,11 @@ import javafx.util.Duration;
 
 import com.cgvsu.math.vector.Vector3f;
 
+import java.awt.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +56,7 @@ public class GuiController {
 
 
     private Model mesh = null;
+    private Texture texture = null;
 
     private final Camera camera = new Camera(
             new Vector3f(0, 0, 100),
@@ -101,7 +107,8 @@ public class GuiController {
             camera.setAspectRatio((float) (width / height));
 
             if (mesh != null) {
-                RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
+
+                RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, texture, (int) width, (int) height);
             }
         });
 
@@ -227,7 +234,9 @@ public class GuiController {
 
     @FXML
     public void handleUploadTexture() {
-
+//        texture = new Texture(Path.of("C:\\Users\\MaxOmenes\\Documents\\!Root\\Development\\Java\\CGI\\CGI_task4\\assets\\models\\AlexWithTexture\\NeutralWrapped.jpg")) ;
+//        texture = new Texture(Color.CYAN);
+        texture = new Texture(Path.of("C:\\Users\\MaxOmenes\\Documents\\!Root\\Development\\Java\\CGI\\CGI_task4\\assets\\models\\Cube\\texture.png"));
     }
 
     @FXML
