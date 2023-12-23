@@ -7,6 +7,7 @@ import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.render_engine.transformation.AffineTransformation;
+import com.cgvsu.render_engine.transformation.DefaultRotate;
 import com.cgvsu.render_engine.transformation.DefaultScale;
 import com.cgvsu.triangulation.CalculationNormals;
 import com.cgvsu.triangulation.Triangulation;
@@ -107,13 +108,13 @@ public class GuiController {
             camera.setAspectRatio((float) (width / height));
 
             if (mesh != null) {
-
                 RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, texture, (int) width, (int) height);
             }
         });
 
         timeline.getKeyFrames().add(frame);
         timeline.play();
+
 
         topScrollPane.setContent(treeView);
         treeView.prefHeightProperty().bind(topScrollPane.heightProperty());
@@ -180,6 +181,11 @@ public class GuiController {
         FileUtils.FileInfo file = new FileUtils().fileChooserOpen(canvas);
 
         mesh = ObjReader.read(file.content());
+
+        AffineTransformation af = new AffineTransformation();
+        af.setScale(new DefaultScale(10, 10, 10));
+        af.calculate(mesh.vertices);
+
         Triangulation.triangulateModel(mesh);
         CalculationNormals.calculateNormals(mesh);
         treeViewController.deleteAllObjects();
@@ -241,6 +247,6 @@ public class GuiController {
 
     @FXML
     public void handleDeleteTexture() {
-
+        texture = null;
     }
 }

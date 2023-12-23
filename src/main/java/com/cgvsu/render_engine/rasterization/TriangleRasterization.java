@@ -6,6 +6,7 @@ import com.cgvsu.math.vector.Vector3f;
 import com.cgvsu.model.Texture;
 import com.cgvsu.render_engine.screen.Pixel;
 import com.cgvsu.render_engine.screen.Screen;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -102,7 +103,7 @@ public class TriangleRasterization {
                 l = r;
                 r = tmp;
             }
-            float z = (v1.z + v2.z + v3.z)/3 ;
+            float z = (v1.z + v2.z + v3.z)/3 ; //! formula
             for (int x = l; x <= r; x++) {
                 final Vector2f tp = getTexturePoint(x, y,
                         textureTriangle.t1, textureTriangle.t2, textureTriangle.t3, area);

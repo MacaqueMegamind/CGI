@@ -6,7 +6,8 @@ import com.cgvsu.math.vector.Vector3f;
 import java.util.Comparator;
 
 public class Pixel {
-    Point2f point;
+    int x;
+    int y;
     float z;
     int rgb;
 
@@ -15,12 +16,14 @@ public class Pixel {
     };
 
     public Pixel(Point2f v, float z, int rgb) {
-        this.point = v;
+        this.x = (int) v.x;
+        this.y = (int) v.y;
         this.z = z;
         this.rgb = rgb;
     }
     public Pixel(Vector3f v, int rgb) {
-        this.point = new Point2f(v.x, v.y);
+        this.x = (int) v.x;
+        this.y = (int) v.y;
         this.z = v.z;
         this.rgb = rgb;
     }

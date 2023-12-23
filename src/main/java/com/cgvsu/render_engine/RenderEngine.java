@@ -25,6 +25,11 @@ public class RenderEngine {
             final int width,
             final int height)
     {
+        if(texture == null){
+            render(graphicsContext, camera, mesh, width, height);
+            return;
+        }
+
         Screen screen = new Screen();
 
         Matrix4f modelMatrix = rotateScaleTranslate();

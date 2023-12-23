@@ -11,22 +11,29 @@ public class Screen {
     HashMap<Point2f, Pixel> pixelsMap = new HashMap<>();
 
     public void add(Pixel p){
-        if(!pixelsSet.contains(p.point)){
-            pixelsSet.add(p.point);
-            pixelsMap.put(p.point, p);
+        if(p.rgb == 0 || p.x * p.y < 0){
+            return;
+        }
+
+        Point2f point = new Point2f(p.x, p.y);
+        if(!pixelsSet.contains(point)){
+            pixelsSet.add(point);
+            pixelsMap.put(point, p);
         }else {
-            Pixel f = pixelsMap.get(p.point);
+            Pixel f = pixelsMap.get(point);
             if(f.compare(p) > 0){
-                pixelsMap.put(f.point, p);
+                pixelsMap.put(point, p);
             }
         }
     }
     public void draw(PixelWriter px){
-        for(Map.Entry<Point2f, Pixel> p:pixelsMap.entrySet()){
-            Point2f point = p.getKey();
-            Pixel pixel = p.getValue();
-            px.setArgb((int) point.x, (int) point.y, pixel.rgb);
+        ArrayList<Pixel> a = new ArrayList<>(pixelsMap.values());
+
+        System.out.println("Start frame");
+        for(Pixel pixel: a){
+            px.setArgb( pixel.x, pixel.y, pixel.rgb);
         }
+        System.out.println("New frame");
     }
 
     public void clear(){
