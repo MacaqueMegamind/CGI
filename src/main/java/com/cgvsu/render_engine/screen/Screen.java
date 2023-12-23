@@ -14,8 +14,15 @@ public class Screen {
         this.px = px;
     }
 
+    public Screen(PixelWriter px, int width, int height){
+        this.px = px;
+        zBuffer = new Float[width][height];
+    }
+
     HashSet<Point2f> pixelsSet = new HashSet<>();
     HashMap<Point2f, Float> pixelsMap = new HashMap<>(); //Z buffer
+
+    Float zBuffer[][];
 
     public void add(Pixel p){
         if(p.rgb == 0 || p.x * p.y < 0){
@@ -33,6 +40,17 @@ public class Screen {
                 pixelsMap.put(point, p.z);
                 px.setArgb(p.x, p.y, p.rgb);
             }
+        }
+    }
+
+    public void draw(int x, int y, float z, int rgb){
+        if(rgb == 0 || x * y < 0){
+            return;
+        }
+
+        if(zBuffer[x][y] == null || zBuffer[x][y] > z){
+            px.setArgb(x, y, rgb);
+            zBuffer[x][y] = z;
         }
     }
 //    public void draw(PixelWriter px){

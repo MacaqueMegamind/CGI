@@ -110,7 +110,8 @@ public class TriangleRasterization {
                         x1, y1, x2, y2, x3, y3,
                         textureTriangle.t1, textureTriangle.t2, textureTriangle.t3, area);
                 final int colorBits = texture.getPixel(tp);
-                screen.add(new Pixel(new Point2f(x, y), z, colorBits));
+//                screen.add(new Pixel(new Point2f(x, y), z, colorBits));
+                screen.draw(x, y, z, colorBits);
             }
         }
     }
@@ -151,7 +152,8 @@ public class TriangleRasterization {
                         x1, y1, x2, y2, x3, y3,
                         textureTriangle.t1, textureTriangle.t2, textureTriangle.t3, area);
                 final int colorBits = texture.getPixel(tp);
-                screen.add(new Pixel(new Point2f(x, y), z, colorBits));
+//                screen.add(new Pixel(new Point2f(x, y), z, colorBits));
+                screen.draw(x, y, z, colorBits);
             }
         }
     }
