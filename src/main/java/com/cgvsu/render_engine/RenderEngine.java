@@ -69,7 +69,7 @@ public class RenderEngine {
             }
         }
 //        screen.draw(graphicsContext.getPixelWriter());
-        screen.clear();
+//        screen.clear();
 
     }
 

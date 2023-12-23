@@ -182,9 +182,9 @@ public class GuiController {
 
         mesh = ObjReader.read(file.content());
 
-//        AffineTransformation af = new AffineTransformation();
-//        af.setScale(new DefaultScale(10, 10, 10));
-//        af.calculate(mesh.vertices);
+        AffineTransformation af = new AffineTransformation();
+        af.setScale(new DefaultScale(10, 10, 10));
+        af.calculate(mesh.vertices);
 
         Triangulation.triangulateModel(mesh);
         CalculationNormals.calculateNormals(mesh);
@@ -240,9 +240,9 @@ public class GuiController {
 
     @FXML
     public void handleUploadTexture() {
-        texture = new Texture(Path.of("C:\\Users\\MaxOmenes\\Documents\\!Root\\Development\\Java\\CGI\\CGI_task4\\assets\\models\\AlexWithTexture\\NeutralWrapped.jpg")) ;
+//        texture = new Texture(Path.of("C:\\Users\\MaxOmenes\\Documents\\!Root\\Development\\Java\\CGI\\CGI_task4\\assets\\models\\AlexWithTexture\\NeutralWrapped.jpg")) ;
 //        texture = new Texture(Color.CYAN);
-//        texture = new Texture(Path.of("C:\\Users\\MaxOmenes\\Documents\\!Root\\Development\\Java\\CGI\\CGI_task4\\assets\\models\\Cube\\texture.png"));
+        texture = new Texture(Path.of("C:\\Users\\MaxOmenes\\Documents\\!Root\\Development\\Java\\CGI\\CGI_task4\\assets\\models\\Cube\\texture.png"));
     }
 
     @FXML

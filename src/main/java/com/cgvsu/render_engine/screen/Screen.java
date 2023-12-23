@@ -9,6 +9,8 @@ import java.util.*;
 public class Screen {
 
     PixelWriter px;
+    int width;
+    int height;
 
     public Screen(PixelWriter px) {
         this.px = px;
@@ -16,6 +18,8 @@ public class Screen {
 
     public Screen(PixelWriter px, int width, int height){
         this.px = px;
+        this.width = width;
+        this.height = height;
         zBuffer = new Float[width][height];
     }
 
@@ -66,5 +70,6 @@ public class Screen {
     public void clear(){
         pixelsSet.clear();
         pixelsMap.clear();
+        zBuffer = new Float[width][height];
     }
 }
