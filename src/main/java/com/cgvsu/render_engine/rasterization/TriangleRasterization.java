@@ -65,7 +65,8 @@ public class TriangleRasterization {
         final int y3 = (int) verts[2].y;
 
         // Double the area of the triangle. Used to calculate the barycentric coordinates later.
-        final float area = Math.abs(v1.cut().to(v2.cut()).crs(v1.cut().to(v3.cut())));
+//        final float area = Math.abs(v1.cut().to(v2.cut()).crs(v1.cut().to(v3.cut())));
+        final float area = (1.0f / (float) ((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)));
 
 
         drawTopTriangle(screen, x1, y1, x2, y2, x3, y3,
@@ -106,6 +107,7 @@ public class TriangleRasterization {
             float z = (v1.z + v2.z + v3.z)/3 ; //! formula
             for (int x = l; x <= r; x++) {
                 final Vector2f tp = getTexturePoint(x, y,
+                        x1, y1, x2, y2, x3, y3,
                         textureTriangle.t1, textureTriangle.t2, textureTriangle.t3, area);
                 final int colorBits = texture.getPixel(tp);
                 screen.add(new Pixel(new Point2f(x, y), z, colorBits));
@@ -146,6 +148,7 @@ public class TriangleRasterization {
             float z = (v1.z + v2.z + v3.z)/3 ;
             for (int x = l; x <= r; x++) {
                 final Vector2f tp = getTexturePoint(x, y,
+                        x1, y1, x2, y2, x3, y3,
                         textureTriangle.t1, textureTriangle.t2, textureTriangle.t3, area);
                 final int colorBits = texture.getPixel(tp);
                 screen.add(new Pixel(new Point2f(x, y), z, colorBits));
@@ -159,19 +162,27 @@ public class TriangleRasterization {
      */
     private static Vector2f getTexturePoint(
             final int x, final int y,
-            final Vector2f v1,
-            final Vector2f v2,
-            final Vector2f v3,
+            final int x1, final int y1,
+            final int x2, final int y2,
+            final int x3, final int y3,
+            final Vector2f t1,
+            final Vector2f t2,
+            final Vector2f t3,
             final float area
     ) {
         p.set(x, y);
-        final float w1 = Math.abs(v2.cpy().to(p).crs(v2.cpy().to(v3.cpy()))) / area;
-        final float w2 = Math.abs(v1.cpy().to(p).crs(v1.cpy().to(v3.cpy()))) / area;
-        final float w3 = Math.abs(v1.cpy().to(p).crs(v1.cpy().to(v2.cpy()))) / area;
+//        final float w1 = Math.abs(v2.cpy().to(p)
+//                .crs(v2.cpy().to(v3.cpy()))) / area;
+//        final float w2 = Math.abs(v1.cpy().to(p).crs(v1.cpy().to(v3.cpy()))) / area;
+//        final float w3 = Math.abs(v1.cpy().to(p).crs(v1.cpy().to(v2.cpy()))) / area;
+
+        float w1 = (float) ((x2 - x) * (y3 - y) - (y2 - y) * (x3 - x)) * area;
+        float w2 = (float) ((x3 - x) * (y1 - y) - (y3 - y) * (x1 - x)) * area;
+        float w3 = 1.0f - (w1 + w2);
 
         return new Vector2f(
-                clamp(w1 * v1.x + w2 * v2.x + w3 * v3.x),
-                clamp(w1 * v1.y + w2 * v2.y + w3 * v3.y)
+                clamp(w1 * t1.x + w2 * t2.x + w3 * t3.x),
+                clamp(w1 * t1.y + w2 * t2.y + w3 * t3.y)
         );
     }
 

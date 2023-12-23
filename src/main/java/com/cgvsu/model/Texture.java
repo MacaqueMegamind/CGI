@@ -38,7 +38,7 @@ public class Texture {
 
             for (int row = 0; row < height; row++) {
                 for (int col = 0; col < width; col++) {
-                    pixels[row][col] = bufferedImage.getRGB(row, col);
+                    pixels[row][col] = bufferedImage.getRGB(col, row);
                 }
             }
         }catch (IOException e){
@@ -55,7 +55,7 @@ public class Texture {
         if (width >= pixels[0].length || height >= pixels.length){
             return 0;
         }
-        return pixels[height][width];
+        return pixels[height - (int) v.y][width - (int) v.x];
     }
 
 

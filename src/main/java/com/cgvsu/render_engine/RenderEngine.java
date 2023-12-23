@@ -30,7 +30,7 @@ public class RenderEngine {
             return;
         }
 
-        Screen screen = new Screen();
+        Screen screen = new Screen(graphicsContext.getPixelWriter());
 
         Matrix4f modelMatrix = rotateScaleTranslate();
         Matrix4f viewMatrix = camera.getViewMatrix();
@@ -68,7 +68,7 @@ public class RenderEngine {
                         polygon, texture, polygonTexture);
             }
         }
-        screen.draw(graphicsContext.getPixelWriter());
+//        screen.draw(graphicsContext.getPixelWriter());
         screen.clear();
 
     }
