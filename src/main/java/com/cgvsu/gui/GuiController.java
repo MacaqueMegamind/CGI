@@ -1,6 +1,9 @@
 package com.cgvsu.gui;
 
+import com.cgvsu.AlertProcessing;
+import com.cgvsu.Scene;
 import com.cgvsu.model.Model;
+import com.cgvsu.model.Texture;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
@@ -23,6 +26,7 @@ import com.cgvsu.math.vector.Vector3f;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +56,7 @@ public class GuiController {
 
     private double mouseX, mouseY;
 
-    private Model mesh = null;
+    private final Scene scene = new Scene();
 
     private final Camera camera = new Camera(
             new Vector3f(0, 0, 100),
@@ -66,6 +70,7 @@ public class GuiController {
         anchorPaneCanvas.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPaneCanvas.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
 
+        Model mesh = scene.getCurrentModelObject();
 
         canvas.setOnMousePressed(event -> {
             mouseX = event.getSceneX();
@@ -78,7 +83,7 @@ public class GuiController {
 
             if (event.isPrimaryButtonDown()) {
                 // Rotate
-                rotateModel((float) deltaY, (float) deltaX, 0, mesh, camera);
+                rotateModel((float) deltaY, (float) deltaX, 0, scene.getCurrentModelObject(), camera);
             } else if (event.isSecondaryButtonDown()) {
                 // Translate
                 camera.movePosition(new Vector3f((float) deltaX, (float) -deltaY, 0));
@@ -93,15 +98,10 @@ public class GuiController {
             float newFov = camera.getFov();
 
             if (scrollEvent.getDeltaY() < 0){
-                if (newFov <= maxFov){
-                    newFov += fovDelta;
-                }
-            } else {
-                if (newFov >= fovDelta){
-                    newFov -= fovDelta;
-                }
+                newFov += fovDelta;
+            } else if (scrollEvent.getDeltaY() > 0) {
+                newFov -= fovDelta;
             }
-
             camera.setFov(newFov);
         });
 
@@ -114,9 +114,8 @@ public class GuiController {
 
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             camera.setAspectRatio((float) (width / height));
-
-            if (mesh != null) {
-                RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
+            if (scene.getCurrentModel() != null) {
+                scene.render(canvas.getGraphicsContext2D(), camera, (int) width, (int) height);
             }
         });
 
@@ -128,12 +127,12 @@ public class GuiController {
         treeView.prefWidthProperty().bind(topScrollPane.widthProperty());
         treeViewController.initialize();
 
-        keyActions.put(KeyCode.UP, () -> rotateModel(-2*TRANSLATION, 0, 0, mesh, camera));
-        keyActions.put(KeyCode.DOWN, () -> rotateModel(2*TRANSLATION, 0, 0, mesh, camera));
-        keyActions.put(KeyCode.RIGHT, () -> rotateModel(0, 2*TRANSLATION, 0, mesh, camera));
-        keyActions.put(KeyCode.LEFT, () -> rotateModel(0, -2*TRANSLATION, 0, mesh, camera));
-        keyActions.put(KeyCode.W, () -> rotateModel(0, 0, -2*TRANSLATION, mesh, camera));
-        keyActions.put(KeyCode.S, () -> rotateModel(0, 0, -2*TRANSLATION, mesh, camera));
+//        keyActions.put(KeyCode.UP, () -> rotateModel(-2*TRANSLATION, 0, 0, mesh, camera));
+//        keyActions.put(KeyCode.DOWN, () -> rotateModel(2*TRANSLATION, 0, 0, mesh, camera));
+//        keyActions.put(KeyCode.RIGHT, () -> rotateModel(0, 2*TRANSLATION, 0, mesh, camera));
+//        keyActions.put(KeyCode.LEFT, () -> rotateModel(0, -2*TRANSLATION, 0, mesh, camera));
+//        keyActions.put(KeyCode.W, () -> rotateModel(0, 0, -2*TRANSLATION, mesh, camera));
+//        keyActions.put(KeyCode.S, () -> rotateModel(0, 0, -2*TRANSLATION, mesh, camera));
 
         canvas.setOnKeyPressed(e -> {
             Runnable action = keyActions.get(e.getCode());
@@ -147,10 +146,11 @@ public class GuiController {
 
         treeView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.DELETE) {
+                scene.deleteModel(treeViewController.getSelectedItem().getValue().getName());
                 treeViewController.deleteSelectedItem();
-                mesh = null;
             } else if (event.getCode() == KeyCode.ENTER) {
-                mesh = treeViewController.getSelectedItem().getValue().getModel();
+                TreeViewController.ItemWrap itemWrap = treeViewController.getSelectedItem().getValue();
+                scene.setCurrentModel(itemWrap.getName());
             }
         });
 
@@ -164,9 +164,14 @@ public class GuiController {
     public void handleUploadModel() {
         FileUtils.FileInfo file = new FileUtils().fileChooserOpen(canvas);
 
-        mesh = ObjReader.read(file.content());
+        Model mesh = ObjReader.read(file.content());
+
         Triangulation.triangulateModel(mesh);
         CalculationNormals.calculateNormals(mesh);
+
+        scene.deleteAllModels();
+        scene.addModel(mesh, file.name());
+
         treeViewController.deleteAllObjects();
         treeViewController.addItem(new TreeViewController.ItemWrap(mesh, file.name(),
                 TreeViewController.ItemType.OBJECT));
@@ -175,16 +180,19 @@ public class GuiController {
     @FXML
     public void handleAddModel() {
         FileUtils.FileInfo file = new FileUtils().fileChooserOpen(canvas);
-
-        mesh = ObjReader.read(file.content());
+        Model mesh = ObjReader.read(file.content());
         Triangulation.triangulateModel(mesh);
         CalculationNormals.calculateNormals(mesh);
+
+        scene.addModel(mesh, file.name());
         treeViewController.addItem(new TreeViewController.ItemWrap(mesh, file.name(),
                 TreeViewController.ItemType.OBJECT));
     }
 
     @FXML
     public void handleExportModel() throws IOException {
+        Model mesh = scene.getCurrentModelObject();
+
         FileUtils.DirInfo dir = new FileUtils().dirChooserOpen(canvas);
         TreeViewController.ItemWrap itemWrap = treeViewController.getItemByMesh(mesh);
         Path path = dir.path().resolve(itemWrap.getName());
@@ -214,11 +222,17 @@ public class GuiController {
 
     @FXML
     public void handleInfo() {
-
+        AlertProcessing.showInfoDialog("Информация о проекте", "Инструкция по использованию", "Как пользоваться? Тут все интуитивно понятно");
     }
 
     @FXML
     public void handleUploadTexture() {
+        FileUtils.FileInfo file = new FileUtils().fileChooserOpen(canvas);
+
+        Texture texture = new Texture(Paths.get(file.path()));
+
+
+
 
     }
 

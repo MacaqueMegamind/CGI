@@ -15,14 +15,16 @@ public class Scene {
 
     public  ArrayList<Texture> textures = new ArrayList<>();
 
-    public ArrayList<Model> loadedMeshes = new ArrayList<>();
-
     public HashMap<String, Model> loadedModels = new HashMap<>();
 
     private List<Camera> camera = new ArrayList<>();
 
     public String getCurrentModel() {
         return currentModel;
+    }
+
+    public Model getCurrentModelObject() {
+        return loadedModels.get(currentModel);
     }
 
     public HashMap<String, Model> getLoadedModels() {
@@ -45,10 +47,6 @@ public class Scene {
         this.camera = camera;
     }
 
-    public List<Model> getLoadedMeshes() {
-        return loadedMeshes;
-    }
-
     public void addTexture(Texture texture){
         textures.remove(texture);
     }
@@ -57,11 +55,24 @@ public class Scene {
         textures.remove(texture);
     }
 
+    public void addModel(Model model, String name) {
+        currentModel = name;
+        loadedModels.put(name, model);
+    }
 
-    public void render(GraphicsContext graphicsContext, Camera camera, int width, int height, Texture texture){
-        for(Model model: loadedMeshes)
+    public void deleteAllModels() {
+        loadedModels.clear();
+    }
+
+    public void deleteModel(String name) {
+        loadedModels.remove(name);
+    }
+
+
+    public void render(GraphicsContext graphicsContext, Camera camera, int width, int height) {
+        for (Model model: loadedModels.values()) {
             RenderEngine.render(graphicsContext, camera, model, width, height);
-
+        }
     }
 
 

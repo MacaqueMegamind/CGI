@@ -1,6 +1,6 @@
 package com.cgvsu.gui;
 
-import com.cgvsu.Error_Processing;
+import com.cgvsu.AlertProcessing;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 import javafx.scene.canvas.Canvas;
 
 public class FileUtils {
-    public record FileInfo(String content, String name) {}
+    public record FileInfo(String content, String name, String path) {}
     public record DirInfo(Path path) {}
 
     public FileInfo fileChooserOpen(Canvas canvas) {
@@ -30,11 +30,10 @@ public class FileUtils {
         Path fileName = Path.of(file.getAbsolutePath());
 
         try {
-            return new FileInfo(Files.readString(fileName), file.getName());
+            return new FileInfo(Files.readString(fileName), file.getName(), file.getAbsolutePath());
             // todo: обработка ошибок
         } catch (IOException exception){
-            Error_Processing error_processing = new Error_Processing();
-            error_processing.showErrorDialog(exception, getClass().getSimpleName());
+            AlertProcessing.showErrorDialog(exception, getClass().getSimpleName());
             return null;
         }
     }

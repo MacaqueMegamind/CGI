@@ -1,10 +1,6 @@
 package com.cgvsu;
 
 import com.cgvsu.render_engine.RenderEngine;
-import com.cgvsu.render_engine.transformation.AffineTransformation;
-import com.cgvsu.render_engine.transformation.DefaultRotate;
-import com.cgvsu.render_engine.transformation.DefaultScale;
-import com.cgvsu.render_engine.transformation.DefaultTransition;
 import com.cgvsu.triangulation.CalculationNormals;
 import com.cgvsu.triangulation.Triangulation;
 import javafx.fxml.FXML;
@@ -20,7 +16,6 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.io.IOException;
 import java.io.File;
 import com.cgvsu.math.vector.Vector3f;
 
@@ -120,8 +115,7 @@ public class GuiController {
 
             // todo: обработка ошибок
         } catch (Exception exception) {
-            Error_Processing error_processing = new Error_Processing();
-            error_processing.showErrorDialog(exception, getClass().getSimpleName());
+            AlertProcessing.showErrorDialog(exception, getClass().getSimpleName());
         }
     }
 
