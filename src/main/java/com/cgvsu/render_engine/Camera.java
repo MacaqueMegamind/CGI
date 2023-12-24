@@ -21,7 +21,6 @@ public class Camera {
     }
 
     public AffineTransformation af = new AffineTransformation();
-
     public void setPosition(final Vector3f position) {
         this.position = position;
     }

@@ -2,8 +2,6 @@ package com.cgvsu.transformation;
 
 import com.cgvsu.math.Constants;
 import com.cgvsu.math.vector.Vector3f;
-import com.cgvsu.render_engine.transformation.AffineTransformation;
-import com.cgvsu.render_engine.transformation.DefaultScale;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

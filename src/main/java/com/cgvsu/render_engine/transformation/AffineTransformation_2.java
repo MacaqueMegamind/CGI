@@ -8,22 +8,22 @@ import com.cgvsu.math.vector.Vector4f;
 
 import java.util.List;
 
-public class AffineTransformation implements Transformation{
+public class AffineTransformation_2 implements Transformation{
 
     Rotate rotate;
     Scale scale;
     Transition transition;
 
-    public AffineTransformation(Rotate rotate, Scale scale, Transition transition) {
+    public AffineTransformation_2(Rotate rotate, Scale scale, Transition transition) {
         this.rotate = rotate;
         this.scale = scale;
         this.transition = transition;
     }
 
-    public AffineTransformation() {
-        this.rotate = new DefaultRotate();
-        this.scale = new DefaultScale();
-        this.transition = new DefaultTransition();
+    public AffineTransformation_2() {
+        this.rotate = new InvertedRotate();
+        this.scale = new InvertedScale();
+        this.transition = new InvertedTransition();
     }
 
     public Rotate getRotate() {
@@ -52,9 +52,9 @@ public class AffineTransformation implements Transformation{
 
     private Matrix4f translateMatrix3To4(Matrix3f m){
         return new Matrix4f(new float[]{m.val[0], m.val[3], m.val[6], 0,
-                                        m.val[1], m.val[4], m.val[7], 0,
-                                        m.val[2], m.val[5], m.val[8], 0,
-                                        0, 0, 0, 1});
+                m.val[1], m.val[4], m.val[7], 0,
+                m.val[2], m.val[5], m.val[8], 0,
+                0, 0, 0, 1});
     }
     @Override
     public void calculate (List<Vector3f> vector){
