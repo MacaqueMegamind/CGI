@@ -1,7 +1,10 @@
 package com.cgvsu;
 
 import com.cgvsu.model.Model;
+import com.cgvsu.model.Texture;
 import com.cgvsu.render_engine.Camera;
+import com.cgvsu.render_engine.RenderEngine;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +13,7 @@ import java.util.List;
 public class Scene {
     String currentModel;
 
-    Model mergeModel;
+    public  ArrayList<Texture> textures = new ArrayList<>();
 
     public ArrayList<Model> loadedMeshes = new ArrayList<>();
 
@@ -46,23 +49,20 @@ public class Scene {
         return loadedMeshes;
     }
 
-    public void addMesh(Model model){
-            loadedMeshes.add(model);
-            mergeModel();
+    public void addTexture(Texture texture){
+        textures.remove(texture);
     }
 
-    public void deleteMesh(Model model){
-        loadedMeshes.remove(model);
-        mergeModel();
+    public void deleteTexture(Texture texture){
+        textures.remove(texture);
     }
-    private void mergeModel (){
-        Model mergeModel = new Model();
-        for(Model model: loadedMeshes) {
-            mergeModel.vertices.addAll(model.vertices);
-            mergeModel.polygons.addAll(model.polygons);
-            mergeModel.normals.addAll(model.normals);
-            mergeModel.textureVertices.addAll(model.textureVertices);
-        }
-        this.mergeModel = mergeModel;
+
+
+    public void render(GraphicsContext graphicsContext, Camera camera, int width, int height, Texture texture){
+        for(Model model: loadedMeshes)
+            RenderEngine.render(graphicsContext, camera, model, width, height);
+
     }
+
+
 }
