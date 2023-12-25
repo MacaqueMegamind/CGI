@@ -1,15 +1,12 @@
 package com.cgvsu.render_engine.rasterization;
 
-import com.cgvsu.math.point.Point2f;
+import com.cgvsu.math.MathUtils;
 import com.cgvsu.math.vector.Vector2f;
 import com.cgvsu.math.vector.Vector3f;
 import com.cgvsu.model.Texture;
-import com.cgvsu.render_engine.Camera;
-import com.cgvsu.render_engine.screen.Pixel;
 import com.cgvsu.render_engine.screen.Screen;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -23,6 +20,8 @@ public class TriangleRasterization {
             return cmp;
         } else return Float.compare(a.x, b.x);
     };
+
+    final static int MESH_COLOR = -16777216; //black
 
     /**
      * A mutable vector used to speed up calculations.
@@ -75,47 +74,6 @@ public class TriangleRasterization {
                 v1, v2, v3, texture, textureTriangle, area);
         drawBottomTriangle(screen, x1, y1, x2, y2, x3, y3,
                 v1, v2, v3, texture, textureTriangle, area);
-
-//        for (int y = (int) y1; y <= y2; y++) {
-//            float startX = getX(y, x1, x2, y1, y2);
-//            float endX = getX(y, x1, x3, y1, y3);
-//            fillLine(screen, y, startX, endX, x1, x2, x3, y1, y2, y3, v1, v2, v3, textureTriangle, texture, area);
-//        }
-//
-//        for (int y = (int) y2; y < y3; y++) {
-//            float startX = getX(y, x1, x3, y1, y3);
-//            float endX = getX(y, x2, x3, y2, y3);
-//            fillLine(screen, y, startX, endX, x1, x2, x3, y1, y2, y3, v1, v2, v3, textureTriangle, texture, area);
-//        }
-    }
-
-    private static float getX(float y, float x1, float x2, float y1, float y2) {
-        return (x2 - x1) * (y - y1) / (y2 - y1) + x1;
-    }
-
-    private static void fillLine(
-            final Screen screen, int y, float startX, float endX,
-            int x1, int x2, int x3,
-            int y1, int y2, int y3,
-            final Vector3f v1,
-            final Vector3f v2,
-            final Vector3f v3,
-            final TextureTriangle textureTriangle, final Texture texture,
-            final float area) {
-
-        if (Float.compare(startX, endX) > 0) {
-            float temp = startX;
-            startX = endX;
-            endX = temp;
-        }
-        float z = (v1.z + v2.z + v3.z)/3;
-        for (int x = (int) startX; x < endX; x++) {
-            final Vector2f tp = getTexturePoint(x, y,
-                    x1, y1, x2, y2, x3, y3,
-                    textureTriangle.t1, textureTriangle.t2, textureTriangle.t3, area);
-            final int colorBits = texture.getPixel(tp);
-            screen.draw(x, y, z, colorBits);
-        }
     }
 
     /**
@@ -149,11 +107,25 @@ public class TriangleRasterization {
             }
             float z = (v1.z + v2.z + v3.z)/3 ; //! formula
             for (int x = l; x <= r; x++) {
+                int colorBits = MESH_COLOR;
+                boolean meshDrawn = false;
+
                 final Vector2f tp = getTexturePoint(x, y,
                         x1, y1, x2, y2, x3, y3,
                         textureTriangle.t1, textureTriangle.t2, textureTriangle.t3, area);
-                final int colorBits = texture.getPixel(tp);
-//                screen.add(new Pixel(new Point2f(x, y), z, colorBits));
+
+                if(textureTriangle.meshMode &&
+                        (isOnLine(x, y, x1, y1, x2, y2) ||
+                                isOnLine(x, y, x1, y1, x3, y3) ||
+                                isOnLine(x, y, x3, y3, x2, y2))){
+                    meshDrawn = true;
+                }else {
+                    colorBits = 0;
+                }
+
+                if(textureTriangle.textureMode && !meshDrawn) {
+                    colorBits = texture.getPixel(tp);
+                }
                 screen.draw(x, y, z, colorBits);
             }
         }
@@ -191,11 +163,25 @@ public class TriangleRasterization {
             }
             float z = (v1.z + v2.z + v3.z)/3 ;
             for (int x = l; x <= r; x++) {
+                int colorBits = MESH_COLOR;
+                boolean meshDrawn = false;
+
                 final Vector2f tp = getTexturePoint(x, y,
                         x1, y1, x2, y2, x3, y3,
                         textureTriangle.t1, textureTriangle.t2, textureTriangle.t3, area);
-                final int colorBits = texture.getPixel(tp);
-//                screen.add(new Pixel(new Point2f(x, y), z, colorBits));
+
+                if(textureTriangle.meshMode &&
+                    (isOnLine(x, y, x1, y1, x2, y2) ||
+                        isOnLine(x, y, x1, y1, x3, y3) ||
+                        isOnLine(x, y, x3, y3, x2, y2))){
+                    meshDrawn = true;
+                }else {
+                    colorBits = 0;
+                }
+
+                if(textureTriangle.textureMode && !meshDrawn) {
+                    colorBits = texture.getPixel(tp);
+                }
                 screen.draw(x, y, z, colorBits);
             }
         }
@@ -229,6 +215,14 @@ public class TriangleRasterization {
                 clamp(w1 * t1.x + w2 * t2.x + w3 * t3.x),
                 clamp(w1 * t1.y + w2 * t2.y + w3 * t3.y)
         );
+    }
+
+    private static boolean isOnLine(int x, int y, int x1, int y1, int x2, int y2){
+        return  Math.abs(sideLenght(x1, y1, x2, y2) - (sideLenght(x, y, x1, y1) + sideLenght(x, y, x2, y2))) < 0.1;
+    }
+
+    private static double sideLenght(int x1, int y1, int x2, int y2){
+        return Math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
     }
 
     /**

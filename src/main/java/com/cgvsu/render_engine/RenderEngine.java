@@ -25,11 +25,6 @@ public class RenderEngine {
             final int width,
             final int height)
     {
-        if(texture == null){
-            render(graphicsContext, camera, mesh, width, height);
-            return;
-        }
-
         Screen screen = new Screen(graphicsContext.getPixelWriter(), width, height);
 
         Matrix4f modelMatrix = rotateScaleTranslate();
@@ -62,7 +57,7 @@ public class RenderEngine {
                         resultPoints.get(2));
                 TextureTriangle polygonTexture = new TextureTriangle(mesh.textureVertices.get(polygonIndexes.get(0)),
                                 mesh.textureVertices.get(polygonIndexes.get(1)),
-                                mesh.textureVertices.get(polygonIndexes.get(2)));
+                                mesh.textureVertices.get(polygonIndexes.get(2)), true, true);
                 TriangleRasterization.drawTriangle(screen,
                         polygon, texture, polygonTexture);
             }
