@@ -56,7 +56,6 @@ public class RenderEngine {
                 resultPoints.add(resultPoint);
             }
 
-
             if(resultPoints.size() == 3){
                 Triangle polygon = new Triangle(resultPoints.get(0),
                         resultPoints.get(1),
@@ -68,9 +67,6 @@ public class RenderEngine {
                         polygon, texture, polygonTexture);
             }
         }
-//        screen.draw(graphicsContext.getPixelWriter());
-//        screen.clear();
-
     }
 
     //draw model without texture

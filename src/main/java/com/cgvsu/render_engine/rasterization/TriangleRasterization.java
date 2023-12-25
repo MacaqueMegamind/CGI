@@ -4,9 +4,11 @@ import com.cgvsu.math.point.Point2f;
 import com.cgvsu.math.vector.Vector2f;
 import com.cgvsu.math.vector.Vector3f;
 import com.cgvsu.model.Texture;
+import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.screen.Pixel;
 import com.cgvsu.render_engine.screen.Screen;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -73,6 +75,47 @@ public class TriangleRasterization {
                 v1, v2, v3, texture, textureTriangle, area);
         drawBottomTriangle(screen, x1, y1, x2, y2, x3, y3,
                 v1, v2, v3, texture, textureTriangle, area);
+
+//        for (int y = (int) y1; y <= y2; y++) {
+//            float startX = getX(y, x1, x2, y1, y2);
+//            float endX = getX(y, x1, x3, y1, y3);
+//            fillLine(screen, y, startX, endX, x1, x2, x3, y1, y2, y3, v1, v2, v3, textureTriangle, texture, area);
+//        }
+//
+//        for (int y = (int) y2; y < y3; y++) {
+//            float startX = getX(y, x1, x3, y1, y3);
+//            float endX = getX(y, x2, x3, y2, y3);
+//            fillLine(screen, y, startX, endX, x1, x2, x3, y1, y2, y3, v1, v2, v3, textureTriangle, texture, area);
+//        }
+    }
+
+    private static float getX(float y, float x1, float x2, float y1, float y2) {
+        return (x2 - x1) * (y - y1) / (y2 - y1) + x1;
+    }
+
+    private static void fillLine(
+            final Screen screen, int y, float startX, float endX,
+            int x1, int x2, int x3,
+            int y1, int y2, int y3,
+            final Vector3f v1,
+            final Vector3f v2,
+            final Vector3f v3,
+            final TextureTriangle textureTriangle, final Texture texture,
+            final float area) {
+
+        if (Float.compare(startX, endX) > 0) {
+            float temp = startX;
+            startX = endX;
+            endX = temp;
+        }
+        float z = (v1.z + v2.z + v3.z)/3;
+        for (int x = (int) startX; x < endX; x++) {
+            final Vector2f tp = getTexturePoint(x, y,
+                    x1, y1, x2, y2, x3, y3,
+                    textureTriangle.t1, textureTriangle.t2, textureTriangle.t3, area);
+            final int colorBits = texture.getPixel(tp);
+            screen.draw(x, y, z, colorBits);
+        }
     }
 
     /**
