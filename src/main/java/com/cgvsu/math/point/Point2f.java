@@ -23,4 +23,9 @@ public class Point2f {
     public void setY(float y) {
         this.y = y;
     }
+
+    @Override
+    public int hashCode() {
+        return (int) ((x+y)*(x+y+1)/2 + y);
+    }
 }

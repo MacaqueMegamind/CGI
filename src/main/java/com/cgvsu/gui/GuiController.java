@@ -7,6 +7,7 @@ import com.cgvsu.model.Texture;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
+import com.cgvsu.render_engine.DrawModes;
 import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.CalculationNormals;
 import com.cgvsu.triangulation.Triangulation;
@@ -18,6 +19,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -61,7 +63,7 @@ public class GuiController {
     private final Camera camera = new Camera(
             new Vector3f(0, 0, 100),
             new Vector3f(0, 0, 0),
-            1F, 1, 0.01F, 100);
+            1.0F, 1, 0.01F, 100);
 
     private final Map<KeyCode, Runnable> keyActions = new HashMap<>();
 
@@ -108,7 +110,7 @@ public class GuiController {
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
 
-        KeyFrame frame = new KeyFrame(Duration.millis(15), event -> {
+        KeyFrame frame = new KeyFrame(Duration.millis(60), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
 
@@ -127,12 +129,12 @@ public class GuiController {
         treeView.prefWidthProperty().bind(topScrollPane.widthProperty());
         treeViewController.initialize();
 
-//        keyActions.put(KeyCode.UP, () -> rotateModel(-2*TRANSLATION, 0, 0, mesh, camera));
-//        keyActions.put(KeyCode.DOWN, () -> rotateModel(2*TRANSLATION, 0, 0, mesh, camera));
-//        keyActions.put(KeyCode.RIGHT, () -> rotateModel(0, 2*TRANSLATION, 0, mesh, camera));
-//        keyActions.put(KeyCode.LEFT, () -> rotateModel(0, -2*TRANSLATION, 0, mesh, camera));
-//        keyActions.put(KeyCode.W, () -> rotateModel(0, 0, -2*TRANSLATION, mesh, camera));
-//        keyActions.put(KeyCode.S, () -> rotateModel(0, 0, -2*TRANSLATION, mesh, camera));
+        keyActions.put(KeyCode.UP, () -> camera.movePosition(new Vector3f(0, TRANSLATION, 0)));
+        keyActions.put(KeyCode.DOWN, () -> camera.movePosition(new Vector3f(0, -TRANSLATION, 0)));
+        keyActions.put(KeyCode.RIGHT, () -> camera.movePosition(new Vector3f(-TRANSLATION, 0, 0)));
+        keyActions.put(KeyCode.LEFT, () -> camera.movePosition(new Vector3f(TRANSLATION, 0, 0)));
+        keyActions.put(KeyCode.W, () -> camera.movePosition(new Vector3f(0, 0, -TRANSLATION)));
+        keyActions.put(KeyCode.S, () -> camera.movePosition(new Vector3f(0, 0, TRANSLATION)));
 
         canvas.setOnKeyPressed(e -> {
             Runnable action = keyActions.get(e.getCode());
@@ -207,12 +209,12 @@ public class GuiController {
 
     @FXML
     public void handleShowMesh() {
-
+        DrawModes.ChangeMeshMode(mesh);
     }
 
     @FXML
     public void handleUseLight() {
-
+        DrawModes.ChangeLightedMode(mesh);
     }
 
     @FXML
@@ -234,10 +236,13 @@ public class GuiController {
 
 
 
+        DrawModes.EnableTextureMode(mesh);
     }
 
     @FXML
     public void handleDeleteTexture() {
+        texture = null;
 
+        DrawModes.DisableTextureMode(mesh);
     }
 }
