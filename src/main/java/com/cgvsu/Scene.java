@@ -12,9 +12,11 @@ import java.util.List;
 
 public class Scene {
     private String currentModel;
-   private String currentTexture;
+    private String currentTexture;
 
+    private String currentCamera;
     private HashMap<String, Texture> textures = new HashMap<>();
+    private HashMap<String, Camera> cameras = new HashMap<>();
 
     private HashMap<String, Model> loadedModels = new HashMap<>();
 
@@ -23,11 +25,12 @@ public class Scene {
     public String getCurrentModel() {
         return currentModel;
     }
-    public String getCurrentTexture(){
+
+    public String getCurrentTexture() {
         return currentTexture;
     }
 
-    public  Texture getCurrentTextureObject(){
+    public Texture getCurrentTextureObject() {
         return textures.get(currentTexture);
     }
 
@@ -39,11 +42,12 @@ public class Scene {
         return loadedModels;
     }
 
-    public List<Camera> getCamera() {
-        return camera;
+    public Camera getCamera(String name) {
+        return cameras.get(name);
     }
-    public Texture getTexture(String name){
-       return textures.get(name);
+
+    public Texture getTexture(String name) {
+        return textures.get(name);
     }
 
     public void setCurrentModel(String currentModel) {
@@ -54,8 +58,8 @@ public class Scene {
         this.loadedModels = loadedModels;
     }
 
-    public void setCamera(List<Camera> camera) {
-        this.camera = camera;
+    public void setCurrentCamera(String currentCamera) {
+        this.currentCamera = currentCamera;
     }
 
     public void addTexture(String name, Texture texture) {
@@ -63,8 +67,18 @@ public class Scene {
         textures.put(name, texture);
     }
 
+
     public void deleteTexture(String name) {
         textures.remove(name);
+    }
+
+    public void deleteAllTextures(){
+        textures.clear();
+    }
+
+    public void addCamera(String name, Camera camera) {
+        currentCamera = name;
+        cameras.put(name, camera);
     }
 
     public void addModel(Model model, String name) {
@@ -76,8 +90,16 @@ public class Scene {
         loadedModels.clear();
     }
 
+
     public void deleteModel(String name) {
         loadedModels.remove(name);
+    }
+
+    public void deleteCamera(String name){
+        cameras.remove(name);
+    }
+    public void deleteAllCameras(){
+        cameras.clear();
     }
 
 
