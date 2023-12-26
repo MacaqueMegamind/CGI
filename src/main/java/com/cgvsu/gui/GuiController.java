@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.cgvsu.render_engine.GraphicConveyor.rotateModel;
+import static com.cgvsu.render_engine.GraphicConveyor.rotateScene;
 
 public class GuiController {
 
@@ -88,7 +89,8 @@ public class GuiController {
                 rotateModel((float) deltaY, (float) deltaX, 0, scene.getCurrentModelObject(), camera);
             } else if (event.isSecondaryButtonDown()) {
                 // Translate
-                camera.movePosition(new Vector3f((float) deltaX, (float) -deltaY, 0));
+//                camera.movePosition(new Vector3f((float) deltaX, (float) -deltaY, 0));
+                rotateScene((float) deltaY, (float) deltaX, 0, scene, camera);
             }
 
             mouseX = event.getSceneX();
@@ -100,8 +102,10 @@ public class GuiController {
             float newFov = camera.getFov();
 
             if (scrollEvent.getDeltaY() < 0){
-                newFov += fovDelta;
-            } else if (scrollEvent.getDeltaY() > 0) {
+                if (newFov <= maxFov){
+                    newFov += fovDelta;
+                }
+            } else if (newFov >= fovDelta) {
                 newFov -= fovDelta;
             }
             camera.setFov(newFov);

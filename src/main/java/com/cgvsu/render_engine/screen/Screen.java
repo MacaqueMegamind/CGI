@@ -48,7 +48,7 @@ public class Screen {
     }
 
     public void draw(int x, int y, float z, int rgb){
-        if(rgb == 0 || x * y < 0){
+        if(rgb == 0 || x < 0 || y < 0){
             return;
         }
 

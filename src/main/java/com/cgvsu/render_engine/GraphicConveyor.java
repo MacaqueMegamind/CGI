@@ -1,9 +1,12 @@
 package com.cgvsu.render_engine;
+import com.cgvsu.Scene;
 import com.cgvsu.math.matrix.*;
 import com.cgvsu.math.vector.*;
 import com.cgvsu.math.point.*;
 import com.cgvsu.model.Model;
 import com.cgvsu.render_engine.transformation.DefaultRotate;
+
+import java.util.ArrayList;
 
 public class GraphicConveyor {
 
@@ -19,6 +22,13 @@ public class GraphicConveyor {
     public static void rotateModel(float x, float y, float z, Model model, Camera camera){
         camera.af.setRotate(new DefaultRotate(x, y, z));
         camera.af.calculate(model.vertices);
+    }
+
+    public static void rotateScene(float x, float y, float z, Scene scene, Camera camera){
+        ArrayList<Model> models = new ArrayList<>(scene.getLoadedModels().values());
+        for(Model model:models){
+            rotateModel(x, y, z, model, camera);
+        }
     }
 
     public static Matrix4f lookAt(Vector3f eye, Vector3f target) {
