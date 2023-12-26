@@ -14,12 +14,6 @@ public class TriangleRasterization {
     /**
      * A comparator used to sort the vertices of a triangle.
      */
-    private static final Comparator<Vector3f> COMPARATOR = (a, b) -> {
-        int cmp = Float.compare(a.y, b.y);
-        if (cmp != 0) {
-            return cmp;
-        } else return Float.compare(a.x, b.x);
-    };
 
     final static int MESH_COLOR = -16777216; //black
 
@@ -55,15 +49,14 @@ public class TriangleRasterization {
             final Texture texture,
             final TextureTriangle textureTriangle
     ) {
-        // Sort vertices by y.
-        final var verts = new Vector3f[]{v1, v2, v3};
-        Arrays.sort(verts, COMPARATOR);
-        final int x1 = (int) verts[0].x;
-        final int x2 = (int) verts[1].x;
-        final int x3 = (int) verts[2].x;
-        final int y1 = (int) verts[0].y;
-        final int y2 = (int) verts[1].y;
-        final int y3 = (int) verts[2].y;
+        textureTriangle.sort();
+
+        final int x1 = (int) textureTriangle.v1.x;
+        final int x2 = (int) textureTriangle.v2.x;
+        final int x3 = (int) textureTriangle.v3.x;
+        final int y1 = (int) textureTriangle.v1.y;
+        final int y2 = (int) textureTriangle.v2.y;
+        final int y3 = (int) textureTriangle.v3.y;
 
         // Double the area of the triangle. Used to calculate the barycentric coordinates later.
 //        final float area = Math.abs(v1.cut().to(v2.cut()).crs(v1.cut().to(v3.cut())));
