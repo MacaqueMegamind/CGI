@@ -164,7 +164,7 @@ public class GuiController {
 
     @FXML
     public void handleUploadModel() {
-        FileUtils.FileInfo file = new FileUtils().fileChooserOpen(canvas);
+        FileUtils.FileInfo file = new FileUtils().fileChooserOpenModel(canvas);
 
         Model mesh = ObjReader.read(file.content());
 
@@ -181,7 +181,7 @@ public class GuiController {
 
     @FXML
     public void handleAddModel() {
-        FileUtils.FileInfo file = new FileUtils().fileChooserOpen(canvas);
+        FileUtils.FileInfo file = new FileUtils().fileChooserOpenModel(canvas);
         Model mesh = ObjReader.read(file.content());
         Triangulation.triangulateModel(mesh);
         CalculationNormals.calculateNormals(mesh);
@@ -229,12 +229,11 @@ public class GuiController {
 
     @FXML
     public void handleUploadTexture() {
-        FileUtils.FileInfo file = new FileUtils().fileChooserOpen(canvas);
+        Path path = new FileUtils().fileChooserOpenTexture(canvas);
 
-        Texture texture = new Texture(Paths.get(file.path()));
+        Texture texture = new Texture(path);
 
-
-
+        scene.addTexture(scene.getCurrentModel(), texture);
 
         DrawModes.EnableTextureMode(scene.getCurrentModelObject());
     }

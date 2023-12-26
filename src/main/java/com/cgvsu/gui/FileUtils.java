@@ -17,7 +17,7 @@ public class FileUtils {
     public record FileInfo(String content, String name, String path) {}
     public record DirInfo(Path path) {}
 
-    public FileInfo fileChooserOpen(Canvas canvas) {
+    public FileInfo fileChooserOpenModel(Canvas canvas) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Load Model");
@@ -36,6 +36,18 @@ public class FileUtils {
             AlertProcessing.showErrorDialog(exception, getClass().getSimpleName());
             return null;
         }
+    }
+
+    public Path fileChooserOpenTexture(Canvas canvas) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load Texture");
+
+        File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
+        if (file == null) {
+            return null;
+        }
+
+        return Path.of(file.getAbsolutePath());
     }
 
     public DirInfo dirChooserOpen(Canvas canvas) {
