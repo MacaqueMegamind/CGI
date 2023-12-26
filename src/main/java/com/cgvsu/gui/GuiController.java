@@ -8,7 +8,6 @@ import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.DrawModes;
-import com.cgvsu.render_engine.RenderEngine;
 import com.cgvsu.triangulation.CalculationNormals;
 import com.cgvsu.triangulation.Triangulation;
 import javafx.animation.Animation;
@@ -19,7 +18,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -28,7 +26,6 @@ import com.cgvsu.math.vector.Vector3f;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,8 +69,6 @@ public class GuiController {
     private void initialize() {
         anchorPaneCanvas.prefWidthProperty().addListener((ov, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
         anchorPaneCanvas.prefHeightProperty().addListener((ov, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
-
-        Model mesh = scene.getCurrentModelObject();
 
         canvas.setOnMousePressed(event -> {
             mouseX = event.getSceneX();
@@ -216,12 +211,12 @@ public class GuiController {
 
     @FXML
     public void handleShowMesh() {
-        DrawModes.ChangeMeshMode(scene.getCurrentModelObject());
+        DrawModes.changeMeshMode(scene.getCurrentModelObject());
     }
 
     @FXML
     public void handleUseLight() {
-        DrawModes.ChangeLightedMode(scene.getCurrentModelObject());
+        DrawModes.changeLightedMode(scene.getCurrentModelObject());
     }
 
     @FXML
@@ -242,12 +237,12 @@ public class GuiController {
 
         scene.addTexture(scene.getCurrentModel(), texture);
 
-        DrawModes.EnableTextureMode(scene.getCurrentModelObject());
+        DrawModes.enableTextureMode(scene.getCurrentModelObject());
     }
 
     @FXML
     public void handleDeleteTexture() {
 
-        DrawModes.DisableTextureMode(scene.getCurrentModelObject());
+        DrawModes.disableTextureMode(scene.getCurrentModelObject());
     }
 }

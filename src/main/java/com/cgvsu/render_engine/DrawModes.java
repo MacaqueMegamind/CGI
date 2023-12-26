@@ -3,33 +3,33 @@ package com.cgvsu.render_engine;
 import com.cgvsu.model.Model;
 
 public class DrawModes {
-    public static void ChangeMeshMode(Model mesh) {
+    public static void changeMeshMode(Model mesh) {
         mesh.setMeshMode(!mesh.isMeshMode());
     }
-    public static void EnableMeshMode(Model mesh) {
+    public static void enableMeshMode(Model mesh) {
         mesh.setMeshMode(true);
     }
-    public static void DisableMeshMode(Model mesh) {
+    public static void disableMeshMode(Model mesh) {
         mesh.setMeshMode(false);
     }
 
-    public static void ChangeTextureMode(Model mesh) {
+    public static void changeTextureMode(Model mesh) {
         mesh.setTextureMode(!mesh.isTextureMode());
     }
-    public static void EnableTextureMode(Model mesh) {
+    public static void enableTextureMode(Model mesh) {
         mesh.setTextureMode(true);
     }
-    public static void DisableTextureMode(Model mesh) {
+    public static void disableTextureMode(Model mesh) {
         mesh.setTextureMode(false);
     }
 
-    public static void ChangeLightedMode(Model mesh) {
+    public static void changeLightedMode(Model mesh) {
         mesh.setLightedMode(!mesh.isLightedMode());
     }
-    public static void EnableLightedMode(Model mesh) {
+    public static void enableLightedMode(Model mesh) {
         mesh.setLightedMode(true);
     }
-    public static void DisableLightedMode(Model mesh) {
+    public static void disableLightedMode(Model mesh) {
         mesh.setLightedMode(false);
     }
 }
