@@ -5,10 +5,8 @@ import com.cgvsu.model.Texture;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.Camera;
+import com.cgvsu.render_engine.DrawModes;
 import com.cgvsu.render_engine.RenderEngine;
-import com.cgvsu.render_engine.transformation.AffineTransformation;
-import com.cgvsu.render_engine.transformation.DefaultRotate;
-import com.cgvsu.render_engine.transformation.DefaultScale;
 import com.cgvsu.triangulation.CalculationNormals;
 import com.cgvsu.triangulation.Triangulation;
 import javafx.animation.Animation;
@@ -25,11 +23,9 @@ import javafx.util.Duration;
 
 import com.cgvsu.math.vector.Vector3f;
 
-import java.awt.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -220,12 +216,12 @@ public class GuiController {
 
     @FXML
     public void handleShowMesh() {
-
+        DrawModes.ChangeMeshMode(mesh);
     }
 
     @FXML
     public void handleUseLight() {
-
+        DrawModes.ChangeLightedMode(mesh);
     }
 
     @FXML
@@ -240,13 +236,17 @@ public class GuiController {
 
     @FXML
     public void handleUploadTexture() {
-        texture = new Texture(Path.of("C:\\Users\\MaxOmenes\\Documents\\!Root\\Development\\Java\\CGI\\CGI_task4\\assets\\models\\AlexWithTexture\\NeutralWrapped.jpg")) ;
+        texture = new Texture(Path.of("E:\\Admin\\DevAndProgs\\ProjectsJava\\ComputerGraphics\\FinalTask\\CGI\\assets\\models\\AlexWithTexture\\NeutralWrapped.jpg")) ;
 //        texture = new Texture(Color.CYAN);
 //        texture = new Texture(Path.of("C:\\Users\\MaxOmenes\\Documents\\!Root\\Development\\Java\\CGI\\CGI_task4\\assets\\models\\Cube\\texture.png"));
+
+        DrawModes.EnableTextureMode(mesh);
     }
 
     @FXML
     public void handleDeleteTexture() {
         texture = null;
+
+        DrawModes.DisableTextureMode(mesh);
     }
 }

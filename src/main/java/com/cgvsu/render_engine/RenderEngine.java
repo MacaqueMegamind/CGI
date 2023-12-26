@@ -57,7 +57,9 @@ public class RenderEngine {
                         resultPoints.get(2));
                 TextureTriangle polygonTexture = new TextureTriangle(mesh.textureVertices.get(polygonIndexes.get(0)),
                                 mesh.textureVertices.get(polygonIndexes.get(1)),
-                                mesh.textureVertices.get(polygonIndexes.get(2)), true, true);
+                                mesh.textureVertices.get(polygonIndexes.get(2)),
+                                mesh.isMeshMode(),
+                                mesh.isTextureMode());
                 TriangleRasterization.drawTriangle(screen,
                         polygon, texture, polygonTexture);
             }
