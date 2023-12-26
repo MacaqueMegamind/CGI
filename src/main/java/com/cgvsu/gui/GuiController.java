@@ -58,6 +58,8 @@ public class GuiController {
 
     private final Scene scene = new Scene();
 
+    private boolean darkTheme = true;
+
     private final Camera camera = new Camera(
             new Vector3f(0, 0, 100),
             new Vector3f(0, 0, 0),
@@ -111,8 +113,9 @@ public class GuiController {
 
         Timeline timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
-
+        
         KeyFrame frame = new KeyFrame(Duration.millis(120), event -> {
+
             double width = canvas.getWidth();
             double height = canvas.getHeight();
 
@@ -221,7 +224,12 @@ public class GuiController {
 
     @FXML
     public void handleInterfaceMode() {
-
+        darkTheme = !darkTheme;
+        if (!darkTheme) {
+            canvas.getScene().getStylesheets().add(getClass().getResource("fxml/dark.css").toExternalForm());
+        } else {
+            canvas.getScene().getStylesheets().remove(getClass().getResource("fxml/dark.css").toExternalForm());
+        }
     }
 
     @FXML
