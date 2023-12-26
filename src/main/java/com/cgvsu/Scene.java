@@ -84,12 +84,11 @@ public class Scene {
     public void render(GraphicsContext graphicsContext, Camera camera, int width, int height) {
         for (String key : loadedModels.keySet()) {
             Texture texture = textures.get(key);
-            if (texture != null) {
-                RenderEngine.render(graphicsContext, camera, loadedModels.get(key), texture, width, height);
+            Model model = loadedModels.get(key);
+            if (texture == null) {
+                model.setTextureMode(false);
             }
-            else {
-                RenderEngine.render(graphicsContext, camera, loadedModels.get(key), width, height);
-            }
+            RenderEngine.render(graphicsContext, camera, loadedModels.get(key), texture, width, height);
         }
     }
 
