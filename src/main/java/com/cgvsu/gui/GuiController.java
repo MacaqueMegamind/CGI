@@ -102,12 +102,15 @@ public class GuiController {
             float newFov = camera.getFov();
 
             if (scrollEvent.getDeltaY() < 0){
-                if (newFov <= maxFov){
+                if (newFov <= maxFov) {
                     newFov += fovDelta;
                 }
-            } else if (newFov >= fovDelta) {
-                newFov -= fovDelta;
+            } else if (scrollEvent.getDeltaY() > 0) {
+                if (newFov >= fovDelta) {
+                    newFov -= fovDelta;
+                }
             }
+
             camera.setFov(newFov);
         });
 
