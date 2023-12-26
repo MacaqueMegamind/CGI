@@ -209,12 +209,12 @@ public class GuiController {
 
     @FXML
     public void handleShowMesh() {
-        DrawModes.ChangeMeshMode(mesh);
+        DrawModes.ChangeMeshMode(scene.getCurrentModelObject());
     }
 
     @FXML
     public void handleUseLight() {
-        DrawModes.ChangeLightedMode(mesh);
+        DrawModes.ChangeLightedMode(scene.getCurrentModelObject());
     }
 
     @FXML
@@ -236,13 +236,12 @@ public class GuiController {
 
 
 
-        DrawModes.EnableTextureMode(mesh);
+        DrawModes.EnableTextureMode(scene.getCurrentModelObject());
     }
 
     @FXML
     public void handleDeleteTexture() {
-        texture = null;
 
-        DrawModes.DisableTextureMode(mesh);
+        DrawModes.DisableTextureMode(scene.getCurrentModelObject());
     }
 }
