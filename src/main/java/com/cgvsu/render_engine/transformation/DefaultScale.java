@@ -15,6 +15,12 @@ public class DefaultScale implements Scale{
     public DefaultScale() {
     }
 
+    public void clear() {
+        this.scaleX = 1;
+        this.scaleY = 1;
+        this.scaleZ = 1;
+    }
+
     public float getScaleX() {
         return scaleX;
     }

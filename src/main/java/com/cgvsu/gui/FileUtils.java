@@ -22,6 +22,47 @@ public class FileUtils {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Load Model");
 
+        return getFileInfo(canvas, fileChooser);
+    }
+
+    public Path fileChooserOpenTexture(Canvas canvas) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load Texture");
+
+        File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
+        if (file == null) {
+            return null;
+        }
+
+        return Path.of(file.getAbsolutePath());
+    }
+
+    public int[] fileChooserOpenDeleteVertices(Canvas canvas) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("File (*.txt)", "*.txt"));
+        fileChooser.setTitle("Delete Vertices");
+
+        FileInfo fileInfo = getFileInfo(canvas, fileChooser);
+        if (fileInfo == null) {
+            return null;
+        }
+
+        if (fileInfo.content() == null) {
+            AlertProcessing.showInfoDialog("Файл пустой", "Файл, который пытаетесь открыть - пустой", "Выберите новый файл");
+        }
+
+        String[] numberStrings = fileInfo.content().split("\n");
+
+        int[] intArray = new int[numberStrings.length];
+
+        for (int i = 0; i < numberStrings.length; i++) {
+            intArray[i] = Integer.parseInt(numberStrings[i]);
+        }
+
+        return intArray;
+    }
+
+    private FileInfo getFileInfo(Canvas canvas, FileChooser fileChooser) {
         File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
         if (file == null) {
             return null;
@@ -36,18 +77,6 @@ public class FileUtils {
             AlertProcessing.showErrorDialog(exception, getClass().getSimpleName());
             return null;
         }
-    }
-
-    public Path fileChooserOpenTexture(Canvas canvas) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Load Texture");
-
-        File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
-        if (file == null) {
-            return null;
-        }
-
-        return Path.of(file.getAbsolutePath());
     }
 
     public DirInfo dirChooserOpen(Canvas canvas) {

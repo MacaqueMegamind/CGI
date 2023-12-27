@@ -20,7 +20,7 @@ public class DefaultRotate implements Rotate{
     }
 
     public void setRotateX(float rotateX) {
-        this.rotateX = rotateX;
+        this.rotateX = (float) Math.toRadians(rotateX);
     }
 
     public float getRotateY() {
@@ -28,15 +28,21 @@ public class DefaultRotate implements Rotate{
     }
 
     public void setRotateY(float rotateY) {
-        this.rotateY = rotateY;
+        this.rotateY = (float) Math.toRadians(rotateY);
     }
 
     public float getRotateZ() {
         return (float) Math.toDegrees(rotateZ);
     }
 
+    public void clear() {
+        this.rotateX = 0;
+        this.rotateY = 0;
+        this.rotateZ = 0;
+    }
+
     public void setRotateZ(float rotateZ) {
-        this.rotateZ = rotateZ;
+        this.rotateZ = (float) Math.toRadians(rotateZ);
     }
     private Matrix3f rotateMatrixX(){
         float[] matrix = new float[]{

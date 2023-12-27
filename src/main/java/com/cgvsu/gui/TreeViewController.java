@@ -1,6 +1,5 @@
 package com.cgvsu.gui;
 
-import com.cgvsu.model.Model;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
@@ -14,20 +13,14 @@ public class TreeViewController {
     }
 
     public static class ItemWrap {
-        private final Model model;
         private final String name;
         private final ItemType itemType;
         private Color color;
 
-        public ItemWrap(Model model, String name, ItemType itemType) {
-            this.model = model;
+        public ItemWrap(String name, ItemType itemType) {
             this.name = name;
             this.itemType = itemType;
             this.color = null;
-        }
-
-        public Model getModel() {
-            return model;
         }
 
         public String getName() {
@@ -63,12 +56,12 @@ public class TreeViewController {
     }
 
     public void initialize() {
-        TreeItem<ItemWrap> rootItem = new TreeItem<>(new ItemWrap(null, "Сцена", null));
+        TreeItem<ItemWrap> rootItem = new TreeItem<>(new ItemWrap("Сцена", null));
         rootItem.setExpanded(true);
 
         // Инициализация разделов для CAMERA и OBJECT
-        cameraRoot = new TreeItem<>(new ItemWrap(null, "Камеры", ItemType.CAMERA));
-        objectRoot = new TreeItem<>(new ItemWrap(null, "Объекты", ItemType.OBJECT));
+        cameraRoot = new TreeItem<>(new ItemWrap("Камеры", ItemType.CAMERA));
+        objectRoot = new TreeItem<>(new ItemWrap("Объекты", ItemType.OBJECT));
 
         rootItem.getChildren().addAll(cameraRoot, objectRoot);
         treeView.setRoot(rootItem);
@@ -111,9 +104,9 @@ public class TreeViewController {
         }
     }
 
-    public ItemWrap getItemByMesh(Model model) {
+    public ItemWrap getItemByName(String name) {
         for (TreeItem<ItemWrap> item : objectRoot.getChildren()) {
-            if (item.getValue().getModel() != null && item.getValue().getModel().equals(model)) {
+            if (item.getValue().getName() != null && item.getValue().getName().equals(name)) {
                 return item.getValue();
             }
         }

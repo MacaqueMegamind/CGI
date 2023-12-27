@@ -3,7 +3,6 @@ package com.cgvsu.render_engine.screen;
 import com.cgvsu.math.point.Point2f;
 import javafx.scene.image.PixelWriter;
 
-import javax.swing.*;
 import java.util.*;
 
 public class Screen {
@@ -48,7 +47,7 @@ public class Screen {
     }
 
     public void draw(int x, int y, float z, int rgb){
-        if(rgb == 0 || x < 0 || y < 0){
+        if(rgb == 0 || x < 0 || y < 0 || x >= width || y >= height){
             return;
         }
 

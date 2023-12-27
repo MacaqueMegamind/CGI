@@ -4,6 +4,7 @@ import com.cgvsu.model.Model;
 import com.cgvsu.model.Texture;
 import com.cgvsu.render_engine.Camera;
 import com.cgvsu.render_engine.RenderEngine;
+import com.cgvsu.render_engine.transformation.AffineTransformation;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ import java.util.List;
 
 public class Scene {
     private String currentModel;
-    private String currentTexture;
 
     private String currentCamera;
     private HashMap<String, Texture> textures = new HashMap<>();
@@ -20,18 +20,20 @@ public class Scene {
 
     private HashMap<String, Model> loadedModels = new HashMap<>();
 
+    private HashMap<String, AffineTransformation> affineTransformations = new HashMap<>();
+
     private List<Camera> camera = new ArrayList<>();
+
+    public AffineTransformation getCurrentTransformation() {
+        return affineTransformations.get(currentModel);
+    }
+
+    public void setAffineTransformation(String name, AffineTransformation affineTransformation) {
+        this.affineTransformations.put(name, affineTransformation);
+    }
 
     public String getCurrentModel() {
         return currentModel;
-    }
-
-    public String getCurrentTexture() {
-        return currentTexture;
-    }
-
-    public Texture getCurrentTextureObject() {
-        return textures.get(currentTexture);
     }
 
     public Model getCurrentModelObject() {
@@ -44,6 +46,10 @@ public class Scene {
 
     public Camera getCamera(String name) {
         return cameras.get(name);
+    }
+
+    public Integer getCameraCount() {
+        return cameras.keySet().size();
     }
 
     public Texture getTexture(String name) {
@@ -63,7 +69,6 @@ public class Scene {
     }
 
     public void addTexture(String name, Texture texture) {
-        currentTexture = name;
         textures.put(name, texture);
     }
 
@@ -81,9 +86,14 @@ public class Scene {
         cameras.put(name, camera);
     }
 
+    public Camera getCurrentCamera() {
+        return cameras.get(currentCamera);
+    }
+
     public void addModel(Model model, String name) {
         currentModel = name;
         loadedModels.put(name, model);
+        this.setAffineTransformation(name, new AffineTransformation());
     }
 
     public void deleteAllModels() {
@@ -107,9 +117,7 @@ public class Scene {
         for (String key : loadedModels.keySet()) {
             Texture texture = textures.get(key);
             Model model = loadedModels.get(key);
-            if (texture == null) {
-                model.setTextureMode(false);
-            }
+            model.setTextureMode(!(texture == null));
             RenderEngine.render(graphicsContext, camera, loadedModels.get(key), texture, width, height);
         }
     }

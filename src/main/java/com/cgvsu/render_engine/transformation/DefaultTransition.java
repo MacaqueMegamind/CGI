@@ -29,6 +29,12 @@ public class DefaultTransition implements Transition {
         this.transitionY = transitionY;
     }
 
+    public void clear() {
+        this.transitionX = 0;
+        this.transitionY = 0;
+        this.transitionZ = 0;
+    }
+
     public float getTransitionZ() {
         return transitionZ;
     }
